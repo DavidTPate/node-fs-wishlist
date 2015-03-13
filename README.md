@@ -11,8 +11,8 @@ Mixin an implementation of the [file system](https://nodejs.org/api/fs.html) int
   * mkdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.mkdirp(path, [callback])](#fsmkdirppath-callback)) is mixed in.
   * rmdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.rmdirp(path, [callback])](#fsrmdirppath-callback)) is mixed in.
   * readdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.readdirp(path, [callback])](#fsreaddirppath-callback)) is mixed in.
-  * copyFile `Boolean` _Optional_ _Default_: `true` Controls whether [fs.copyFile(sourcePath, destinationPath, [callback])](#fscopyFilesourcePath-destinationPath-callback)) is mixed in.
-  * copyDir `Boolean` _Optional_ _Default_: `true` Controls whether [fs.copyDir(sourcePath, destinationPath, [callback])](#fscopyDirsourcePath-destinationPath-callback)) is mixed in.
+  * copyFile `Boolean` _Optional_ _Default_: `true` Controls whether [fs.copyFile(sourcePath, destinationPath, [callback])](#fscopyfilesourcepath-destinationpath-callback)) is mixed in.
+  * copyDir `Boolean` _Optional_ _Default_: `true` Controls whether [fs.copyDir(sourcePath, destinationPath, [callback])](#fscopydirsourcepath-destinationpath-callback)) is mixed in.
 
 ```js
 var fsWishlist = require('fs-wishlist');
@@ -34,9 +34,9 @@ Replace the `fs` module with an already mixed in vesion of `fs`.
   * mkdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.mkdirp(path, [callback])](#fsmkdirppath-callback)) is mixed in.
   * rmdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.rmdirp(path, [callback])](#fsrmdirppath-callback)) is mixed in.
   * readdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.readdirp(path, [callback])](#fsreaddirppath-callback)) is mixed in.
-  * copyFile `Boolean` _Optional_ _Default_: `true` Controls whether [fs.copyFile(sourcePath, destinationPath, [callback])](#fscopyFilesourcePath-destinationPath-callback)) is mixed in.
-  * copyDir `Boolean` _Optional_ _Default_: `true` Controls whether [fs.copyDir(sourcePath, destinationPath, [callback])](#fscopyDirsourcePath-destinationPath-callback)) is mixed in.
-  
+  * copyFile `Boolean` _Optional_ _Default_: `true` Controls whether [fs.copyFile(sourcePath, destinationPath, [callback])](#fscopyfilesourcepath-destinationpath-callback)) is mixed in.
+  * copyDir `Boolean` _Optional_ _Default_: `true` Controls whether [fs.copyDir(sourcePath, destinationPath, [callback])](#fscopydirsourcepath-destinationpath-callback)) is mixed in.
+
 ```js
 require('fs-wishlist').replace();
 
