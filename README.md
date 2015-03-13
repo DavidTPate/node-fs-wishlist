@@ -8,11 +8,11 @@ Mixin an implementation of the [file system](https://nodejs.org/api/fs.html) int
 
 #### Options
 * mixins `Object` _Optional_ enables/disables mixins
-  * mkdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.mkdirp(path, [callback])](#fs.mkdirppath-callback)) is mixed in.
-  * rmdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.rmdirp(path, [callback])](#fs.rmdirppath-callback)) is mixed in.
-  * readdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.readdirp(path, [callback])](#fs.readdirppath-callback)) is mixed in.
-  * copyFile `Boolean` _Optional_ _Default_: `true` Controls whether [fs.copyFile(sourcePath, destinationPath, [callback])](#fs.copyFilesourcePath-destinationPath-callback)) is mixed in.
-  * copyDir `Boolean` _Optional_ _Default_: `true` Controls whether [fs.copyDir(sourcePath, destinationPath, [callback])](#fs.copyDirsourcePath-destinationPath-callback)) is mixed in.
+  * mkdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.mkdirp(path, [callback])](#fsmkdirppath-callback)) is mixed in.
+  * rmdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.rmdirp(path, [callback])](#fsrmdirppath-callback)) is mixed in.
+  * readdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.readdirp(path, [callback])](#fsreaddirppath-callback)) is mixed in.
+  * copyFile `Boolean` _Optional_ _Default_: `true` Controls whether [fs.copyFile(sourcePath, destinationPath, [callback])](#fscopyFilesourcePath-destinationPath-callback)) is mixed in.
+  * copyDir `Boolean` _Optional_ _Default_: `true` Controls whether [fs.copyDir(sourcePath, destinationPath, [callback])](#fscopyDirsourcePath-destinationPath-callback)) is mixed in.
 
 ```js
 var fsWishlist = require('fs-wishlist');
@@ -31,12 +31,12 @@ Replace the `fs` module with an already mixed in vesion of `fs`.
 
 #### Options
 * mixins `Object` _Optional_ enables/disables mixins
-  * mkdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.mkdirp(path, [callback])](#fs.mkdirppath-callback)) is mixed in.
-  * rmdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.rmdirp(path, [callback])](#fs.rmdirppath-callback)) is mixed in.
-  * readdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.readdirp(path, [callback])](#fs.readdirppath-callback)) is mixed in.
-  * copyFile `Boolean` _Optional_ _Default_: `true` Controls whether [fs.copyFile(sourcePath, destinationPath, [callback])](#fs.copyFilesourcePath-destinationPath-callback)) is mixed in.
-  * copyDir `Boolean` _Optional_ _Default_: `true` Controls whether [fs.copyDir(sourcePath, destinationPath, [callback])](#fs.copyDirsourcePath-destinationPath-callback)) is mixed in.
-
+  * mkdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.mkdirp(path, [callback])](#fsmkdirppath-callback)) is mixed in.
+  * rmdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.rmdirp(path, [callback])](#fsrmdirppath-callback)) is mixed in.
+  * readdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.readdirp(path, [callback])](#fsreaddirppath-callback)) is mixed in.
+  * copyFile `Boolean` _Optional_ _Default_: `true` Controls whether [fs.copyFile(sourcePath, destinationPath, [callback])](#fscopyFilesourcePath-destinationPath-callback)) is mixed in.
+  * copyDir `Boolean` _Optional_ _Default_: `true` Controls whether [fs.copyDir(sourcePath, destinationPath, [callback])](#fscopyDirsourcePath-destinationPath-callback)) is mixed in.
+  
 ```js
 require('fs-wishlist').replace();
 
