@@ -1,36 +1,47 @@
 (function (module, extend, mkdirp, rmdirp) {
     'use strict';
 
-    module.exports = {
-        mixin: function (fs, options) {
-            options = options || {};
-            options.mixins = options.mixins || {
+    function mixin(fs, options) {
+        var opts = extend({
+            mixins: {
                 mkdirp: true,
                 rmdirp: true
-            };
+            }
+        }, options || {});
 
-            var mixins = {};
+        var mixins = {};
 
-            Object.keys(options.mixins).forEach(function (key) {
-                key = key.toLowerCase();
+        Object.keys(opts.mixins).forEach(function (key) {
+            key = key.toLowerCase();
 
-                if (options.mixins[key]) {
-                    switch (key) {
-                        case 'mkdirp':
-                            if (!fs.mkdirp) {
-                                mixins.mkdirp = mkdirp;
-                            }
-                            break;
-                        case 'rmdirp':
-                            if (!fs.rmdirp) {
-                                mixins.rmdirp = rmdirp;
-                            }
-                            break;
-                    }
+            if (opts.mixins[key]) {
+                switch (key) {
+                    case 'mkdirp':
+                        if (!fs.mkdirp) {
+                            mixins.mkdirp = mkdirp;
+                        }
+                        break;
+                    case 'rmdirp':
+                        if (!fs.rmdirp) {
+                            mixins.rmdirp = rmdirp;
+                        }
+                        break;
                 }
-            });
+            }
+        });
 
-            return extend({}, fs, mixins);
-        }
+        return extend({}, fs, mixins);
+    }
+
+    function replace(options) {
+        require.cache.fs = {
+            exports: mixin(require('fs'), options)
+        };
+        return require.cache.fs.exports;
+    }
+
+    module.exports = {
+        mixin: mixin,
+        replace: replace
     };
 }(module, require('extend'), require('./lib/mkdirp'), require('./lib/rmdirp')));
