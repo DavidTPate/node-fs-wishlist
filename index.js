@@ -16,7 +16,9 @@
                 if (options.mixins[key]) {
                     switch (key) {
                         case 'mkdirp':
-                            mixins.mkdirp = mkdirp;
+                            if (!fs.mkdirp) {
+                                mixins.mkdirp = mkdirp;
+                            }
                             break;
                     }
                 }
