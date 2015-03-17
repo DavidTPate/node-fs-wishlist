@@ -53,8 +53,8 @@ Proposed mixins.
 
 For all methods callbacks are optional, if provided they will be used otherwise a promise will be returned.
 
-### fs.mkdirp(path, [callback])
-Recursively created directories if they don't exist.
+### fs.mkdirp(path[, mode][, callback])
+Recursively create directories if they don't exist.
 
 ```js
 var fsWishlist = require('fs-wishlist');
