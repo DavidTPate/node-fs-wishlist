@@ -28,6 +28,10 @@
         it('should mixin rmdirp by default', function () {
             expect(lib.mixin(fs)).to.have.property('rmdirp');
         });
+        it('shouldn\'t mixin rmdirp when already implemented', function () {
+            var rmdirpFunc = function() {};
+            expect(lib.mixin(extend({}, fs, {rmdirp: rmdirpFunc})).rmdirp).to.equal(rmdirpFunc);
+        });
         it('should mixin rmdirp when included', function () {
             expect(lib.mixin(fs, {mixins: {rmdirp: true}})).to.have.property('rmdirp');
         });

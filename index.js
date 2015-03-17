@@ -22,7 +22,9 @@
                             }
                             break;
                         case 'rmdirp':
-                            mixins.rmdirp = rmdirp;
+                            if (!fs.rmdirp) {
+                                mixins.rmdirp = rmdirp;
+                            }
                             break;
                     }
                 }
