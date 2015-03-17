@@ -1,0 +1,48 @@
+{
+  "name": "fs-wishlist",
+  "version": "0.1.0",
+  "description": "Mixins for the Node.JS file system adding the functionality we wish it had.",
+  "keywords": [
+    "fs",
+    "wishlist",
+    "mkdir",
+    "recursive",
+    "mkdirp"
+  ],
+  "homepage": "http://github.com/RiptideCloud/fs-wishlist",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/RiptideCloud/fs-wishlist.git"
+  },
+  "bugs": {
+    "url": "http://github.com/RiptideCloud/fs-wishlist/issues"
+  },
+  "author": {
+    "name": "David Pate",
+    "email": "davidtpate@gmail.com",
+    "url": "https://github.com/DavidTPate"
+  },
+  "contributors": [],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/MIT"
+    }
+  ],
+  "main": "index.js",
+  "dependencies": {
+    "bluebird": "^2.x",
+    "extend": "^2.0.0"
+  },
+  "devDependencies": {
+    "chai": "^2.x",
+    "chai-as-promised": "^4.x",
+    "dirty-chai": "^1.x",
+    "mocha": "^2.x",
+    "istanbul": "^0.x",
+    "jshint": "^2.x"
+  },
+  "scripts": {
+    "test": "istanbul cover node_modules/mocha/bin/_mocha -- --check-leaks  --timeout 50000 --reporter spec test/ && jshint . && istanbul check-coverage --statements 100 --branches 100 --functions 100 --lines 100"
+  }
+}
