@@ -1,15 +1,17 @@
 (function (chai, chaiAsPromised, dirtyChai, Promise, lib, fs, extend) {
     'use strict';
 
-    fs = Promise.promisifyAll(fs);
+    if (!fs.existsAsync) {
+        fs = Promise.promisifyAll(fs);
 
-    fs.existsAsync = function (path) {
-        return new Promise(function (resolve, reject) {
-            fs.exists(path, function (exists) {
-                resolve(exists);
+        fs.existsAsync = function (path) {
+            return new Promise(function (resolve, reject) {
+                fs.exists(path, function (exists) {
+                    resolve(exists);
+                });
             });
-        });
-    };
+        };
+    }
 
     chai.use(chaiAsPromised);
     chai.use(dirtyChai);
