@@ -28,6 +28,10 @@
         it('should mixin mkdirp by default', function () {
             expect(lib.mixin(fs)).to.have.property('mkdirp');
         });
+        it('shouldn\'t mixin mkdirp when already implemented', function () {
+            var mkdirpFunc = function() {};
+            expect(lib.mixin(extend({}, fs, {mkdirp: mkdirpFunc})).mkdirp).to.equal(mkdirpFunc);
+        });
         it('should mixin mkdirp when included', function () {
             expect(lib.mixin(fs, {mixins: {mkdirp: true}})).to.have.property('mkdirp');
         });
