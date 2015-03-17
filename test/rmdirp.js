@@ -94,13 +94,13 @@
         });
         it('shouldn\'t be able to remove a directory that already exists and isn\'t a directory', function () {
             return fs.writeFileAsync(testFolder + '/one', 'The ships hung in the sky in much the same way bricks don\'t.').then(function () {
-                return expect(lib.mixin(fs).rmdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'ENOTDIR, readdir \'test/mock/one\'');
+                return expect(lib.mixin(fs).rmdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, /^ENOTDIR/);
             }).finally(function () {
                 return fs.unlink(testFolder + '/one');
             });
         });
         it('shouldn\'t be able to remove a directory that doesn\'t exist', function () {
-            return expect(lib.mixin(fs).rmdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'ENOENT, readdir \'test/mock/one\'');
+            return expect(lib.mixin(fs).rmdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, /^ENOENT/);
         });
         it('should propagate an error from a stats call', function () {
             var xfs = extend({}, lib.mixin(fs), {
