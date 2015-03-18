@@ -5,7 +5,7 @@
     chai.use(dirtyChai);
     var expect = chai.expect;
 
-    describe('#mkdirp', function () {
+    describe('#replace', function () {
         afterEach(function () {
             delete require.cache.fs;
         });

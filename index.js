@@ -1,10 +1,11 @@
-(function (module, extend, mkdirp, rmdirp, readdirp) {
+(function (module, extend, mkdirp, rmdirp, readdirp, copyFile) {
     'use strict';
 
     var availableMixins = {
         mkdirp: mkdirp,
         rmdirp: rmdirp,
-        readdirp: readdirp
+        readdirp: readdirp,
+        copyFile: copyFile
     };
 
     function mixin(fs, options) {
@@ -12,15 +13,14 @@
             mixins: {
                 mkdirp: true,
                 rmdirp: true,
-                readdirp: true
+                readdirp: true,
+                copyFile: true
             }
         }, options || {});
 
         var mixins = {};
 
         Object.keys(opts.mixins).forEach(function (key) {
-            key = key.toLowerCase();
-
             if (opts.mixins[key]) {
                 if (!fs[key]) {
                     mixins[key] = availableMixins[key];
@@ -42,4 +42,4 @@
         mixin: mixin,
         replace: replace
     };
-}(module, require('extend'), require('./lib/mkdirp'), require('./lib/rmdirp'), require('./lib/readdirp')));
+}(module, require('extend'), require('./lib/mkdirp'), require('./lib/rmdirp'), require('./lib/readdirp'), require('./lib/copyFile')));

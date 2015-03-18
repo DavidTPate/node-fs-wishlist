@@ -73,9 +73,9 @@
                         expect(results).to.deep.equal([true, false, false, false, false, false, false, false, false, false]);
                         resolve();
                     });
-                }).finally(function () {
-                    return fs.unlinkAsync(testFolder + '/1.txt');
                 });
+            }).finally(function () {
+                return fs.unlinkAsync(testFolder + '/1.txt');
             });
         });
         it('should be able to recursively remove directories with a callback', function () {
