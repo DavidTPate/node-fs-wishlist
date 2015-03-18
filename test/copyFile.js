@@ -118,7 +118,7 @@
             return fs.mkdirAsync(testFolder + '/one').then(function() {
                 return expect(lib.mixin(fs).copyFile(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Path test/mock/one is not a file');
             }).finally(function () {
-                return fs.rmdir(testFolder + '/one');
+                return fs.rmdirAsync(testFolder + '/one');
             });
         });
         it('shouldn\'t be able to copy a file that doesn\'t exist', function () {
