@@ -8,11 +8,11 @@ Mixin an implementation of the [file system](https://nodejs.org/api/fs.html) int
 
 #### Options
 * mixins `Object` _Optional_ enables/disables mixins
-  * mkdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.mkdirp(path, [callback])](#fsmkdirppath-callback)) is mixed in.
-  * rmdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.rmdirp(path, [callback])](#fsrmdirppath-callback)) is mixed in.
-  * readdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.readdirp(path, [callback])](#fsreaddirppath-callback)) is mixed in.
-  * copyFile `Boolean` _Optional_ _Default_: `true` Controls whether [fs.copyFile(sourcePath, destinationPath, [callback])](#fscopyfilesourcepath-destinationpath-callback)) is mixed in.
-  * copyDir `Boolean` _Optional_ _Default_: `true` Controls whether [fs.copyDir(sourcePath, destinationPath, [callback])](#fscopydirsourcepath-destinationpath-callback)) is mixed in.
+  * mkdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.mkdirp(path[, callback])](#fsmkdirppath-callback)) is mixed in.
+  * rmdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.rmdirp(path[, callback])](#fsrmdirppath-callback)) is mixed in.
+  * readdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.readdirp(path[, callback])](#fsreaddirppath-callback)) is mixed in.
+  * copyFile `Boolean` _Optional_ _Default_: `true` Controls whether [fs.copyFile(sourcePath, destinationPath[, callback])](#fscopyfilesourcepath-destinationpath-callback)) is mixed in.
+  * copyDir `Boolean` _Optional_ _Default_: `true` Controls whether [fs.copyDir(sourcePath, destinationPath[, callback])](#fscopydirsourcepath-destinationpath-callback)) is mixed in.
 
 ```js
 var fsWishlist = require('fs-wishlist');
@@ -31,11 +31,11 @@ Replace the `fs` module with an already mixed in vesion of `fs`.
 
 #### Options
 * mixins `Object` _Optional_ enables/disables mixins
-  * mkdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.mkdirp(path, [callback])](#fsmkdirppath-callback)) is mixed in.
-  * rmdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.rmdirp(path, [callback])](#fsrmdirppath-callback)) is mixed in.
-  * readdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.readdirp(path, [callback])](#fsreaddirppath-callback)) is mixed in.
-  * copyFile `Boolean` _Optional_ _Default_: `true` Controls whether [fs.copyFile(sourcePath, destinationPath, [callback])](#fscopyfilesourcepath-destinationpath-callback)) is mixed in.
-  * copyDir `Boolean` _Optional_ _Default_: `true` Controls whether [fs.copyDir(sourcePath, destinationPath, [callback])](#fscopydirsourcepath-destinationpath-callback)) is mixed in.
+  * mkdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.mkdirp(path[, callback])](#fsmkdirppath-callback)) is mixed in.
+  * rmdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.rmdirp(path[, callback])](#fsrmdirppath-callback)) is mixed in.
+  * readdirp `Boolean` _Optional_ _Default_: `true` Controls whether [fs.readdirp(path[, callback])](#fsreaddirppath-callback)) is mixed in.
+  * copyFile `Boolean` _Optional_ _Default_: `true` Controls whether [fs.copyFile(sourcePath, destinationPath[, callback])](#fscopyfilesourcepath-destinationpath-callback)) is mixed in.
+  * copyDir `Boolean` _Optional_ _Default_: `true` Controls whether [fs.copyDir(sourcePath, destinationPath[, callback])](#fscopydirsourcepath-destinationpath-callback)) is mixed in.
 
 ```js
 require('fs-wishlist').replace();
@@ -64,7 +64,7 @@ xfs.mkdirp('/one/two/three').then(function() {
 });
 ```
 
-### fs.rmdirp(path, [callback])
+### fs.rmdirp(path[, callback])
 Recursively removes the given directory.
 
 ```js
@@ -77,7 +77,7 @@ xfs.rmdirp('/one').then(function() {
 });
 ```
 
-### fs.readdirp(path, [callback])
+### fs.readdirp(path[, callback])
 Recursively reads the given directory.
 
 ```js
@@ -90,7 +90,7 @@ xfs.readdirp('/one').then(function(files) {
 });
 ```
 
-### fs.copyFile(sourcePath, destinationPath, [callback])
+### fs.copyFile(sourcePath, destinationPath[, options][, callback])
 Copies a file from the source to the destination, creates the destination directories if they do not exist.
 
 ```js
@@ -103,7 +103,7 @@ xfs.copyFile('/one/file.txt', '/two/anotherFile.txt').then(function() {
 });
 ```
 
-### fs.copyDir(sourcePath, destinationPath, [callback])
+### fs.copyDir(sourcePath, destinationPath[, callback])
 Recursively copies the contents of a directory to the destination, creates the destination directories if they do not exist.
 This overwrites the files if they already exist, and directories themselves are not copied but instead a new directory is created of the same name.
 
