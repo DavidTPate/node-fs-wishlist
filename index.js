@@ -1,11 +1,18 @@
-(function (module, extend, mkdirp, rmdirp) {
+(function (module, extend, mkdirp, rmdirp, readdirp) {
     'use strict';
+
+    var availableMixins = {
+        mkdirp: mkdirp,
+        rmdirp: rmdirp,
+        readdirp: readdirp
+    };
 
     function mixin(fs, options) {
         var opts = extend({
             mixins: {
                 mkdirp: true,
-                rmdirp: true
+                rmdirp: true,
+                readdirp: true
             }
         }, options || {});
 
@@ -15,17 +22,8 @@
             key = key.toLowerCase();
 
             if (opts.mixins[key]) {
-                switch (key) {
-                    case 'mkdirp':
-                        if (!fs.mkdirp) {
-                            mixins.mkdirp = mkdirp;
-                        }
-                        break;
-                    case 'rmdirp':
-                        if (!fs.rmdirp) {
-                            mixins.rmdirp = rmdirp;
-                        }
-                        break;
+                if (!fs[key]) {
+                    mixins[key] = availableMixins[key];
                 }
             }
         });
@@ -44,4 +42,4 @@
         mixin: mixin,
         replace: replace
     };
-}(module, require('extend'), require('./lib/mkdirp'), require('./lib/rmdirp')));
+}(module, require('extend'), require('./lib/mkdirp'), require('./lib/rmdirp'), require('./lib/readdirp')));
