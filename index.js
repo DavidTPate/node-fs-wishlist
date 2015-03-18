@@ -1,11 +1,12 @@
-(function (module, extend, mkdirp, rmdirp, readdirp, copyFile) {
+(function (module, extend, mkdirp, rmdirp, readdirp, copyFile, copyDir) {
     'use strict';
 
     var availableMixins = {
         mkdirp: mkdirp,
         rmdirp: rmdirp,
         readdirp: readdirp,
-        copyFile: copyFile
+        copyFile: copyFile,
+        copyDir: copyDir
     };
 
     function mixin(fs, options) {
@@ -14,7 +15,8 @@
                 mkdirp: true,
                 rmdirp: true,
                 readdirp: true,
-                copyFile: true
+                copyFile: true,
+                copyDir: true
             }
         }, options || {});
 
@@ -42,4 +44,4 @@
         mixin: mixin,
         replace: replace
     };
-}(module, require('extend'), require('./lib/mkdirp'), require('./lib/rmdirp'), require('./lib/readdirp'), require('./lib/copyFile')));
+}(module, require('extend'), require('./lib/mkdirp'), require('./lib/rmdirp'), require('./lib/readdirp'), require('./lib/copyFile'), require('./lib/copyDir')));

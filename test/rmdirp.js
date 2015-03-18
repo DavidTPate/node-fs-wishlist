@@ -42,7 +42,9 @@
             return fs.mkdirAsync(testFolder + '/one').then(function () {
                 return fs.mkdirAsync(testFolder + '/one/two').then(function () {
                     return fs.mkdirAsync(testFolder + '/one/two/three').then(function () {
-                        return fs.mkdirAsync(testFolder + '/one/two/three/four');
+                        return fs.mkdirAsync(testFolder + '/one/two/three/four').then(function () {
+                            return fs.mkdirAsync(testFolder + '/one/two/three/four/five');
+                        });
                     });
                 });
             }).then(function () {
@@ -67,10 +69,11 @@
                     fs.existsAsync(testFolder + '/one/two/three/4.txt'),
                     fs.existsAsync(testFolder + '/one/two/three/four'),
                     fs.existsAsync(testFolder + '/one/two/three/four/5.txt'),
-                    fs.existsAsync(testFolder + '/one/two/three/four/6.txt')
+                    fs.existsAsync(testFolder + '/one/two/three/four/6.txt'),
+                    fs.existsAsync(testFolder + '/one/two/three/four/five')
                 ]).then(function (results) {
                     return new Promise(function (resolve, reject) {
-                        expect(results).to.deep.equal([true, false, false, false, false, false, false, false, false, false]);
+                        expect(results).to.deep.equal([true, false, false, false, false, false, false, false, false, false, false]);
                         resolve();
                     });
                 });

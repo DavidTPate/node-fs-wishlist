@@ -44,7 +44,9 @@
             return fs.mkdirAsync(testFolder + '/one').then(function () {
                 return fs.mkdirAsync(testFolder + '/one/two').then(function () {
                     return fs.mkdirAsync(testFolder + '/one/two/three').then(function () {
-                        return fs.mkdirAsync(testFolder + '/one/two/three/four');
+                        return fs.mkdirAsync(testFolder + '/one/two/three/four').then(function () {
+                            return fs.mkdirAsync(testFolder + '/one/two/three/four/five');
+                        });
                     });
                 });
             }).then(function () {
@@ -68,7 +70,8 @@
                     testFolder + '/one/two/three/4.txt',
                     testFolder + '/one/two/three/four',
                     testFolder + '/one/two/three/four/5.txt',
-                    testFolder + '/one/two/three/four/6.txt'
+                    testFolder + '/one/two/three/four/6.txt',
+                    testFolder + '/one/two/three/four/five'
                 ]);
                 return true;
             }).finally(function () {
@@ -80,10 +83,12 @@
                     fs.unlinkAsync(testFolder + '/one/two/three/four/5.txt'),
                     fs.unlinkAsync(testFolder + '/one/two/three/four/6.txt')
                 ]).then(function () {
-                    return fs.rmdirAsync(testFolder + '/one/two/three/four').then(function () {
-                        return fs.rmdirAsync(testFolder + '/one/two/three').then(function () {
-                            return fs.rmdirAsync(testFolder + '/one/two').then(function () {
-                                return fs.rmdirAsync(testFolder + '/one');
+                    return fs.rmdirAsync(testFolder + '/one/two/three/four/five').then(function () {
+                        return fs.rmdirAsync(testFolder + '/one/two/three/four').then(function () {
+                            return fs.rmdirAsync(testFolder + '/one/two/three').then(function () {
+                                return fs.rmdirAsync(testFolder + '/one/two').then(function () {
+                                    return fs.rmdirAsync(testFolder + '/one');
+                                });
                             });
                         });
                     });
