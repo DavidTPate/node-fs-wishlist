@@ -49,27 +49,70 @@ fs.readdirp('test').then(function(files) {
 ```
 
 ## Mixins
-Proposed mixins.
-
 For all methods callbacks are optional, if provided they will be used otherwise a promise will be returned.
 
 ### fs.mkdirp(path[, mode][, callback])
 Recursively create directories if they don't exist.
 
 ```js
-var fsWishlist = require('fs-wishlist');
-var fs = require('fs');
-var xfs =
+var xfs = require('fs-wishlist').replace();
+
+xfs.mkdirp('/one/two/three').then(function() {
+  // Directories created
+}, function(reason) {
+  // Something went wrong!
+});
 ```
 
 ### fs.rmdirp(path, [callback])
 Recursively removes the given directory.
 
+```js
+var xfs = require('fs-wishlist').replace();
+
+xfs.rmdirp('/one').then(function() {
+  // All directories and files removed from `/one` and below
+}, function(reason) {
+  // Something went wrong!
+});
+```
+
 ### fs.readdirp(path, [callback])
 Recursively reads the given directory.
 
+```js
+var xfs = require('fs-wishlist').replace();
+
+xfs.readdirp('/one').then(function(files) {
+  // `files` contains a list of all files and directories in `/one` recursively
+}, function(reason) {
+  // Something went wrong!
+});
+```
+
 ### fs.copyFile(sourcePath, destinationPath, [callback])
-Copies a file from the source to the destination.
+Copies a file from the source to the destination, creates the destination directories if they do not exist.
+
+```js
+var xfs = require('fs-wishlist').replace();
+
+xfs.copyFile('/one/file.txt', '/two/anotherFile.txt').then(function() {
+  // Directory `/two` created, and `file.txt` copied over to the new location with the new name
+}, function(reason) {
+  // Something went wrong!
+});
+```
 
 ### fs.copyDir(sourcePath, destinationPath, [callback])
-Recursively copies a directory from the source to the destination.
+Recursively copies the contents of a directory to the destination, creates the destination directories if they do not exist.
+This overwrites the files if they already exist, and directories themselves are not copied but instead a new directory is created of the same name.
+
+```js
+var xfs = require('fs-wishlist').replace();
+
+xfs.copyFile('/one', '/two').then(function() {
+  // All of the same directories created in the destination and the files are copied recursively
+}, function(reason) {
+  // Something went wrong!
+});
+```

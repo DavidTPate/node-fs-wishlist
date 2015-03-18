@@ -1,6 +1,6 @@
 {
   "name": "fs-wishlist",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Mixins for the Node.JS file system adding the functionality we wish it had.",
   "keywords": [
     "fs",
@@ -32,7 +32,7 @@
   "main": "index.js",
   "dependencies": {
     "bluebird": "^2.x",
-    "extend": "^2.0.0"
+    "extend": "^2.x"
   },
   "devDependencies": {
     "chai": "^2.x",
