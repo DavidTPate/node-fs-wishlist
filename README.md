@@ -1,6 +1,8 @@
 # FS Wishlist
 Mixins for the Node.JS [file system](https://nodejs.org/api/fs.html) adding the functionality we wish it had.
 
+**Lead Maintainer**: [David Pate](https://github.com/DavidTPate)
+
 ## Usage
 
 ### mixin(fs, [options])
