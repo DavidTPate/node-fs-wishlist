@@ -1,4 +1,14 @@
 # FS Wishlist
+[![npm](https://img.shields.io/npm/v/fs-wishlist.svg)](https://www.npmjs.com/package/node-fs-wishlist)
+[![npm](https://img.shields.io/npm/dm/fs-wishlist.svg)](https://www.npmjs.com/package/fs-wishlist)
+[![Build Status](https://travis-ci.org/RiptideCloud/node-fs-wishlist.svg?branch=master)](https://travis-ci.org/RiptideCloud/node-fs-wishlist)
+[![Coverage Status](https://img.shields.io/coveralls/RiptideCloud/node-fs-wishlist.svg)](https://coveralls.io/r/RiptideCloud/node-fs-wishlist)
+[![Codacy](https://img.shields.io/codacy/bf3bb75c55424dfabbcf7ca561170424.svg)](https://www.codacy.com/public/davidtpate/node-fs-wishlist)
+[![Code Climate](https://codeclimate.com/github/RiptideCloud/node-fs-wishlist/badges/gpa.svg)](https://codeclimate.com/github/RiptideCloud/node-fs-wishlist)
+[![David](https://img.shields.io/david/RiptideCloud/node-fs-wishlist.svg)](https://david-dm.org/RiptideCloud/node-fs-wishlist)
+[![David](https://img.shields.io/david/dev/RiptideCloud/node-fs-wishlist.svg)](https://david-dm.org/RiptideCloud/node-fs-wishlist)
+[![David](https://img.shields.io/david/peer/RiptideCloud/node-fs-wishlist.svg)](https://david-dm.org/RiptideCloud/node-fs-wishlist)
+
 Mixins for the Node.JS [file system](https://nodejs.org/api/fs.html) adding the functionality we wish it had.
 
 ## Usage
