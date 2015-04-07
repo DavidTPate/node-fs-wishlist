@@ -1,6 +1,6 @@
 {
   "name": "fs-wishlist",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Mixins for the Node.JS file system adding the functionality we wish it had.",
   "keywords": [
     "fs",

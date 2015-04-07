@@ -7,4 +7,12 @@ node_js:
 matrix:
   fast_finish: true
 script: npm test
-after_script: "npm install coveralls && cat ./coverage/lcov.info | coveralls"
+after_script: npm install coveralls && cat ./coverage/lcov.info | coveralls
+deploy:
+  provider: npm
+  email: davidtpate@gmail.com
+  api_key:
+    secure: Ag7AMZO+ReRZiYX2DeDn71l6K4LPAzQlTd3rbUqhgeEHDFPlZT4J7H8nfS+Rg7lBG85DCBFhi/MoF54DhZ6Ls/MtqlaBWDZqOdmlPH2MtIjM5ZpJ7FdniPdffzGw7fFY5IkcbifNqfeTz/A2b0KAvcbi5DDTbjwcqiJQl+PaPjk=
+  on:
+    tags: true
+    repo: RiptideCloud/node-fs-wishlist
