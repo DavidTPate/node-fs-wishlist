@@ -1,0 +1,12 @@
+
+{
+  "excludeFiles": [
+    "node_modules/*",
+    "coverage/*"
+  ],
+  "fileExtensions": [
+    ".js"
+  ],
+  "requireCapitalizedConstructors": true,
+  "requireParenthesesAroundIIFE": true
+}

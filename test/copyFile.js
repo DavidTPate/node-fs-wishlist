@@ -90,9 +90,9 @@
                             fs.existsAsync(testFolder + '/two'),
                             fs.existsAsync(testFolder + '/two/3.txt')
                         ]).then(function (results) {
-                            return new Promise(function (resolve, reject) {
+                            return new Promise(function (readFileResolve) {
                                 expect(results).to.deep.equal([true, true, true, true]);
-                                resolve(Promise.all([
+                                readFileResolve(Promise.all([
                                     fs.readFileAsync(testFolder + '/one/2.txt'),
                                     fs.readFileAsync(testFolder + '/two/3.txt')
                                 ]).spread(function (original, copied) {
