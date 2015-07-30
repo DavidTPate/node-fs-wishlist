@@ -1,4 +1,10 @@
 coverage
 test
-.jshintrc
+.buddyrc
+.eslintignore
+.gitignore
+.jscsrc
 .jshintignore
+.jshintrc
+.jsinspectrc
+.travis.yml
