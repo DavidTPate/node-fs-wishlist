@@ -2,9 +2,7 @@
 {
   "excludeFiles": [
     "node_modules/*",
-    "views/bower_components/*",
-    "coverage/*",
-    "test/karma/*"
+    "coverage/*"
   ],
   "fileExtensions": [
     ".js"
