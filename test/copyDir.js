@@ -153,10 +153,10 @@
                 return Promise.all([
                     fs.existsAsync(testFolder + '/one'),
                     fs.existsAsync(testFolder + '/anotherOne')
-                ]).then(function(results) {
-                   expect(results).to.deep.equal([true, true]);
+                ]).then(function (results) {
+                    expect(results).to.deep.equal([true, true]);
                 });
-            }).finally(function() {
+            }).finally(function () {
                 return Promise.all([
                     fs.rmdirAsync(testFolder + '/one'),
                     fs.rmdirAsync(testFolder + '/anotherOne')
@@ -179,7 +179,7 @@
                     cb(new Error('Some Stats Error'));
                 }
             });
-            return fs.mkdirAsync(testFolder + '/one').then(function() {
+            return fs.mkdirAsync(testFolder + '/one').then(function () {
                 return fs.writeFileAsync(testFolder + '/one/1.txt', 'In an infinite Universe anything can happen.');
             }).then(function () {
                 return expect(xfs.copyDir(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Some Stats Error');
@@ -196,7 +196,7 @@
                 }
             });
             return fs.mkdirAsync(testFolder + '/one').then(function () {
-                return expect(xfs.copyDir(testFolder + '/one', testFolder +'/anotherOne')).to.eventually.be.rejectedWith(Error, 'Some Mkdir Error');
+                return expect(xfs.copyDir(testFolder + '/one', testFolder + '/anotherOne')).to.eventually.be.rejectedWith(Error, 'Some Mkdir Error');
             }).finally(function () {
                 return fs.rmdir(testFolder + '/one');
             });

@@ -9,13 +9,13 @@
     "recursive",
     "mkdirp"
   ],
-  "homepage": "http://github.com/RiptideCloud/fs-wishlist",
+  "homepage": "http://github.com/RiptideElements/node-fs-wishlist",
   "repository": {
     "type": "git",
-    "url": "git://github.com/RiptideCloud/fs-wishlist.git"
+    "url": "git://github.com/RiptideElements/node-fs-wishlist.git"
   },
   "bugs": {
-    "url": "http://github.com/RiptideCloud/fs-wishlist/issues"
+    "url": "http://github.com/RiptideElements/node-fs-wishlist/issues"
   },
   "author": {
     "name": "David Pate",
@@ -23,26 +23,26 @@
     "url": "https://github.com/DavidTPate"
   },
   "contributors": [],
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://www.opensource.org/licenses/MIT"
-    }
-  ],
+  "license": "MIT",
   "main": "index.js",
   "dependencies": {
     "bluebird": "^2.x",
-    "extend": "^2.x"
+    "extend": "^3.x"
   },
   "devDependencies": {
+    "buddy.js": "^0.x",
     "chai": "^2.x",
     "chai-as-promised": "^4.x",
     "dirty-chai": "^1.x",
-    "mocha": "^2.x",
+    "eslint": "^0.x",
     "istanbul": "^0.x",
-    "jshint": "^2.x"
+    "jscs": "^2.x",
+    "jshint": "^2.x",
+    "jsinspect": "^0.x",
+    "mocha": "^2.x",
+    "nsp": "^1.x"
   },
   "scripts": {
-    "test": "istanbul cover node_modules/mocha/bin/_mocha -- --check-leaks  --timeout 50000 --reporter spec test/ && jshint . && istanbul check-coverage --statements 100 --branches 100 --functions 100 --lines 100"
+    "test": "istanbul cover _mocha -- --check-leaks --timeout=5000 test && jshint --show-non-errors . && eslint .&& jscs . && jsinspect . && buddy --detect-objects index.js ./lib && nsp package && nsp shrinkwrap && istanbul check-coverage --statements 100 --branches 100 --functions 100 --lines 100"
   }
 }
