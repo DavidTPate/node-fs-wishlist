@@ -1,0 +1,16 @@
+{
+  "name": "fs-wishlist",
+  "version": "1.0.1",
+  "dependencies": {
+    "bluebird": {
+      "version": "2.9.34",
+      "from": "bluebird@>=2.0.0 <3.0.0",
+      "resolved": "https://registry.npmjs.org/bluebird/-/bluebird-2.9.34.tgz"
+    },
+    "extend": {
+      "version": "3.0.0",
+      "from": "extend@3.0.0",
+      "resolved": "https://registry.npmjs.org/extend/-/extend-3.0.0.tgz"
+    }
+  }
+}
