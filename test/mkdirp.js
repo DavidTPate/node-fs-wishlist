@@ -15,15 +15,20 @@
 
     chai.use(chaiAsPromised);
     chai.use(dirtyChai);
-    var expect = chai.expect,
-        testFolder = 'test/mock';
+
+    var expect = chai.expect;
+    var testFolder = 'test/mock';
+    var mixedFs = lib.mixin(fs);
 
     describe('#mkdirp', function () {
         beforeEach(function () {
-            return fs.mkdirAsync(testFolder);
+            return mixedFs.rmdirp(testFolder)
+                .then(function() {
+                    return mixedFs.mkdirp(testFolder);
+                });
         });
         afterEach(function () {
-            return fs.rmdirAsync(testFolder);
+            return mixedFs.rmdirp(testFolder);
         });
         it('should mixin mkdirp by default', function () {
             expect(lib.mixin(fs)).to.have.property('mkdirp');
@@ -97,8 +102,8 @@
                             expect(oneStats).to.be.ok();
                             expect(twoStats).to.be.ok();
 
-                            expect(oneStats.mode & mode).to.equal(mode & (~process.umask()));
-                            expect(twoStats.mode & mode).to.equal(mode & (~process.umask()));
+                            expect(oneStats.mode & mode).to.equal(mode & ~process.umask());
+                            expect(twoStats.mode & mode).to.equal(mode & ~process.umask());
 
                             resolve();
                         });
@@ -121,7 +126,7 @@
                         expect(exists).to.be.ok();
 
                         return fs.statAsync(testFolder + '/one').then(function (stats) {
-                            expect(stats.mode & mode).to.equal(mode & (~process.umask()));
+                            expect(stats.mode & mode).to.equal(mode & ~process.umask());
                         });
                     }));
                 });
