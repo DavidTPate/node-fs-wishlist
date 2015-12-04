@@ -60,14 +60,6 @@
                         resolve();
                     });
                 });
-            }).finally(function () {
-                return fs.rmdirAsync(testFolder + '/one/two/three/four').then(function () {
-                    return fs.rmdirAsync(testFolder + '/one/two/three').then(function () {
-                        return fs.rmdirAsync(testFolder + '/one/two').then(function () {
-                            return fs.rmdirAsync(testFolder + '/one');
-                        });
-                    });
-                });
             });
         });
         it('should be able to recursively make directories with a callback', function () {
@@ -80,9 +72,7 @@
                         return expect(exists).to.be.ok();
                     }));
                 });
-            }).finally(function () {
-                    return fs.rmdirAsync(testFolder + '/one');
-                });
+            });
         });
         it('should be able to recursively make directories with a mode', function () {
             var mode = parseInt('0776', 8);
@@ -109,10 +99,6 @@
                         });
                     });
                 });
-            }).finally(function () {
-                return fs.rmdirAsync(testFolder + '/one/two').then(function () {
-                    return fs.rmdirAsync(testFolder + '/one');
-                });
             });
         });
         it('should be able to recursively make directories with a mode and callback', function () {
@@ -130,30 +116,22 @@
                         });
                     }));
                 });
-            }).finally(function () {
-                    return fs.rmdirAsync(testFolder + '/one');
-                });
+            });
         });
         it('shouldn\'t be able to overwrite a directory that already exists and isn\'t a directory', function () {
             return fs.writeFileAsync(testFolder + '/one').then(function() {
                 return expect(lib.mixin(fs).mkdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Path test/mock/one already exists and is not a directory');
-            }).finally(function() {
-                return fs.unlink(testFolder + '/one');
             });
         });
         it('should be able to able to create a directory that already exists', function () {
             return fs.mkdirAsync(testFolder + '/one').then(function() {
                 return expect(lib.mixin(fs).mkdirp(testFolder + '/one')).to.eventually.be.fulfilled();
-            }).finally(function() {
-                return fs.rmdir(testFolder + '/one');
             });
         });
         it('should propagate an error from a stats call', function () {
             var xfs = extend({}, lib.mixin(fs), { stat: function(dir, cb) { cb(new Error('Some Stats Error')); } });
             return fs.mkdirAsync(testFolder + '/one').then(function() {
                 return expect(xfs.mkdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Some Stats Error');
-            }).finally(function() {
-                return fs.rmdir(testFolder + '/one');
             });
         });
     });

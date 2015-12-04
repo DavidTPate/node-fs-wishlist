@@ -66,16 +66,6 @@
                         }));
                     });
                 });
-            }).finally(function () {
-                return Promise.all([
-                    fs.unlinkAsync(testFolder + '/one/2.txt'),
-                    fs.unlinkAsync(testFolder + '/two/3.txt')
-                ]).then(function () {
-                    return Promise.all([
-                        fs.rmdirAsync(testFolder + '/one'),
-                        fs.rmdirAsync(testFolder + '/two')
-                    ]);
-                });
             });
         });
         it('should be able to copy a file with a callback', function () {

@@ -104,32 +104,6 @@
                         }
                     });
                 });
-            }).finally(function () {
-                return helper.unlinkPaths(fs, [
-                    testFolder + '/one/2.txt',
-                    testFolder + '/one/two/3.txt',
-                    testFolder + '/one/two/three/4.txt',
-                    testFolder + '/one/two/three/four/5.txt',
-                    testFolder + '/one/two/three/four/6.txt',
-                    testFolder + '/anotherOne/2.txt',
-                    testFolder + '/anotherOne/two/3.txt',
-                    testFolder + '/anotherOne/two/three/4.txt',
-                    testFolder + '/anotherOne/two/three/four/5.txt',
-                    testFolder + '/anotherOne/two/three/four/6.txt'
-                ]).then(function () {
-                    return helper.deleteDirectories(fs, [
-                        testFolder + '/one/two/three/four/five',
-                        testFolder + '/one/two/three/four',
-                        testFolder + '/one/two/three',
-                        testFolder + '/one/two',
-                        testFolder + '/one',
-                        testFolder + '/anotherOne/two/three/four/five',
-                        testFolder + '/anotherOne/two/three/four',
-                        testFolder + '/anotherOne/two/three',
-                        testFolder + '/anotherOne/two',
-                        testFolder + '/anotherOne'
-                    ]);
-                });
             });
         });
         it('should be able to recursively copy directories with a callback', function () {

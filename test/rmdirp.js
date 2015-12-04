@@ -82,8 +82,6 @@
                         resolve();
                     });
                 });
-            }).finally(function () {
-                return fs.unlinkAsync(testFolder + '/1.txt');
             });
         });
         it('should be able to recursively remove directories with a callback', function () {
@@ -103,8 +101,6 @@
         it('shouldn\'t be able to remove a directory that already exists and isn\'t a directory', function () {
             return fs.writeFileAsync(testFolder + '/one', 'The ships hung in the sky in much the same way bricks don\'t.').then(function () {
                 return expect(lib.mixin(fs).rmdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, /ENOTDIR/);
-            }).finally(function () {
-                return fs.unlink(testFolder + '/one');
             });
         });
         it('should be able to remove a directory that doesn\'t exist', function () {
@@ -121,10 +117,6 @@
                 fs.writeFileAsync(testFolder + '/one/1.txt', 'In an infinite Universe anything can happen.')
             ]).then(function () {
                 return expect(xfs.rmdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Some Stats Error');
-            }).finally(function () {
-                return fs.unlinkAsync(testFolder + '/one/1.txt').then(function () {
-                    return fs.rmdir(testFolder + '/one');
-                });
             });
         });
         it('should propagate an error from an unlink call', function () {
@@ -138,10 +130,6 @@
                 fs.writeFileAsync(testFolder + '/one/1.txt', 'In an infinite Universe anything can happen.')
             ]).then(function () {
                 return expect(xfs.rmdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Some Unlink Error');
-            }).finally(function () {
-                return fs.unlinkAsync(testFolder + '/one/1.txt').then(function () {
-                    return fs.rmdir(testFolder + '/one');
-                });
             });
         });
         it('should propagate an error from a rmdir call', function () {
@@ -152,8 +140,6 @@
             });
             return fs.mkdirAsync(testFolder + '/one').then(function () {
                 return expect(xfs.rmdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Some Rmdir Error');
-            }).finally(function () {
-                return fs.rmdir(testFolder + '/one');
             });
         });
     });

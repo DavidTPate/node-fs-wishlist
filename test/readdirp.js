@@ -78,25 +78,6 @@
                     testFolder + '/one/two/three/four/five'
                 ]);
                 return true;
-            }).finally(function () {
-                return Promise.all([
-                    fs.unlinkAsync(testFolder + '/1.txt'),
-                    fs.unlinkAsync(testFolder + '/one/2.txt'),
-                    fs.unlinkAsync(testFolder + '/one/two/3.txt'),
-                    fs.unlinkAsync(testFolder + '/one/two/three/4.txt'),
-                    fs.unlinkAsync(testFolder + '/one/two/three/four/5.txt'),
-                    fs.unlinkAsync(testFolder + '/one/two/three/four/6.txt')
-                ]).then(function () {
-                    return fs.rmdirAsync(testFolder + '/one/two/three/four/five').then(function () {
-                        return fs.rmdirAsync(testFolder + '/one/two/three/four').then(function () {
-                            return fs.rmdirAsync(testFolder + '/one/two/three').then(function () {
-                                return fs.rmdirAsync(testFolder + '/one/two').then(function () {
-                                    return fs.rmdirAsync(testFolder + '/one');
-                                });
-                            });
-                        });
-                    });
-                });
             });
         });
         it('should be able to recursively read directories with a callback', function () {
@@ -110,15 +91,11 @@
                         resolve();
                     });
                 });
-            }).finally(function () {
-                return fs.rmdirAsync(testFolder + '/one');
             });
         });
         it('shouldn\'t be able to read a directory that already exists and isn\'t a directory', function () {
             return fs.writeFileAsync(testFolder + '/one', 'The ships hung in the sky in much the same way bricks don\'t.').then(function () {
                 return expect(lib.mixin(fs).readdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, /ENOTDIR/);
-            }).finally(function () {
-                return fs.unlink(testFolder + '/one');
             });
         });
         it('shouldn\'t be able to read a directory that doesn\'t exist', function () {
@@ -135,10 +112,6 @@
                 fs.writeFileAsync(testFolder + '/one/1.txt', 'In an infinite Universe anything can happen.')
             ]).then(function () {
                 return expect(xfs.readdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Some Stats Error');
-            }).finally(function () {
-                return fs.unlinkAsync(testFolder + '/one/1.txt').then(function () {
-                    return fs.rmdir(testFolder + '/one');
-                });
             });
         });
     });
