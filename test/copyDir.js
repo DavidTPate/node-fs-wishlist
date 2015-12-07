@@ -21,12 +21,9 @@
     describe('#copyDir', function () {
         beforeEach(function () {
             return mixedFs.rmdirp(testFolder)
-                .then(function() {
+                .then(function () {
                     return mixedFs.mkdirp(testFolder);
                 });
-        });
-        afterEach(function () {
-            return mixedFs.rmdirp(testFolder);
         });
         it('should mixin copyDir by default', function () {
             expect(mixedFs).to.have.property('copyDir');
@@ -123,18 +120,11 @@
                 ]).then(function (results) {
                     expect(results).to.deep.equal([true, true]);
                 });
-            }).finally(function () {
-                return Promise.all([
-                    fs.rmdirAsync(testFolder + '/one'),
-                    fs.rmdirAsync(testFolder + '/anotherOne')
-                ]);
             });
         });
         it('shouldn\'t be able to copy a directory that is actually a file', function () {
             return fs.writeFileAsync(testFolder + '/one', 'I\'d far rather be happy than right anyday.').then(function () {
                 return expect(mixedFs.copyDir(testFolder + '/one', testFolder + '/anotherOne')).to.eventually.be.rejectedWith(Error, /ENOTDIR/);
-            }).finally(function () {
-                return fs.unlink(testFolder + '/one');
             });
         });
         it('shouldn\'t be able to copy a directory that doesn\'t exist', function () {
@@ -150,10 +140,6 @@
                 return fs.writeFileAsync(testFolder + '/one/1.txt', 'In an infinite Universe anything can happen.');
             }).then(function () {
                 return expect(xfs.copyDir(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Some Stats Error');
-            }).finally(function () {
-                return fs.unlinkAsync(testFolder + '/one/1.txt').then(function () {
-                    return fs.rmdir(testFolder + '/one');
-                });
             });
         });
         it('should propagate an error from a mkdir call', function () {
@@ -164,8 +150,6 @@
             });
             return fs.mkdirAsync(testFolder + '/one').then(function () {
                 return expect(xfs.copyDir(testFolder + '/one', testFolder + '/anotherOne')).to.eventually.be.rejectedWith(Error, 'Some Mkdir Error');
-            }).finally(function () {
-                return fs.rmdir(testFolder + '/one');
             });
         });
     });

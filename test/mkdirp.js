@@ -23,18 +23,16 @@
     describe('#mkdirp', function () {
         beforeEach(function () {
             return mixedFs.rmdirp(testFolder)
-                .then(function() {
+                .then(function () {
                     return mixedFs.mkdirp(testFolder);
                 });
-        });
-        afterEach(function () {
-            return mixedFs.rmdirp(testFolder);
         });
         it('should mixin mkdirp by default', function () {
             expect(lib.mixin(fs)).to.have.property('mkdirp');
         });
         it('shouldn\'t mixin mkdirp when already implemented', function () {
-            var mkdirpFunc = function() {};
+            var mkdirpFunc = function () {
+            };
             expect(lib.mixin(extend({}, fs, {mkdirp: mkdirpFunc})).mkdirp).to.equal(mkdirpFunc);
         });
         it('should mixin mkdirp when included', function () {
@@ -51,7 +49,7 @@
                     fs.existsAsync(testFolder + '/one/two/three'),
                     fs.existsAsync(testFolder + '/one/two/three/four')
                 ]).spread(function (one, two, three, four) {
-                    return new Promise(function (resolve, reject) {
+                    return new Promise(function (resolve) {
                         expect(one).to.be.ok();
                         expect(two).to.be.ok();
                         expect(three).to.be.ok();
@@ -119,18 +117,22 @@
             });
         });
         it('shouldn\'t be able to overwrite a directory that already exists and isn\'t a directory', function () {
-            return fs.writeFileAsync(testFolder + '/one').then(function() {
+            return fs.writeFileAsync(testFolder + '/one').then(function () {
                 return expect(lib.mixin(fs).mkdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Path test/mock/one already exists and is not a directory');
             });
         });
         it('should be able to able to create a directory that already exists', function () {
-            return fs.mkdirAsync(testFolder + '/one').then(function() {
+            return fs.mkdirAsync(testFolder + '/one').then(function () {
                 return expect(lib.mixin(fs).mkdirp(testFolder + '/one')).to.eventually.be.fulfilled();
             });
         });
         it('should propagate an error from a stats call', function () {
-            var xfs = extend({}, lib.mixin(fs), { stat: function(dir, cb) { cb(new Error('Some Stats Error')); } });
-            return fs.mkdirAsync(testFolder + '/one').then(function() {
+            var xfs = extend({}, lib.mixin(fs), {
+                stat: function (dir, cb) {
+                    cb(new Error('Some Stats Error'));
+                }
+            });
+            return fs.mkdirAsync(testFolder + '/one').then(function () {
                 return expect(xfs.mkdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Some Stats Error');
             });
         });

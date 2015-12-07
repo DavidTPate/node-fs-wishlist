@@ -23,12 +23,9 @@
     describe('#copyFile', function () {
         beforeEach(function () {
             return mixedFs.rmdirp(testFolder)
-                .then(function() {
+                .then(function () {
                     return mixedFs.mkdirp(testFolder);
                 });
-        });
-        afterEach(function () {
-            return mixedFs.rmdirp(testFolder);
         });
         it('should mixin copyFile by default', function () {
             expect(lib.mixin(fs)).to.have.property('copyFile');
@@ -96,23 +93,11 @@
                         }));
                     });
                 });
-            }).finally(function () {
-                return Promise.all([
-                    fs.unlinkAsync(testFolder + '/one/2.txt'),
-                    fs.unlinkAsync(testFolder + '/two/3.txt')
-                ]).then(function () {
-                    return Promise.all([
-                        fs.rmdirAsync(testFolder + '/one'),
-                        fs.rmdirAsync(testFolder + '/two')
-                    ]);
-                });
             });
         });
         it('shouldn\'t be able to copy a directory', function () {
-            return fs.mkdirAsync(testFolder + '/one').then(function() {
+            return fs.mkdirAsync(testFolder + '/one').then(function () {
                 return expect(lib.mixin(fs).copyFile(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Path test/mock/one is not a file');
-            }).finally(function () {
-                return fs.rmdirAsync(testFolder + '/one');
             });
         });
         it('shouldn\'t be able to copy a file that doesn\'t exist', function () {
@@ -129,10 +114,6 @@
                 fs.writeFileAsync(testFolder + '/one/1.txt', 'In an infinite Universe anything can happen.')
             ]).then(function () {
                 return expect(xfs.copyFile(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Some Stats Error');
-            }).finally(function () {
-                return fs.unlinkAsync(testFolder + '/one/1.txt').then(function () {
-                    return fs.rmdir(testFolder + '/one');
-                });
             });
         });
     });

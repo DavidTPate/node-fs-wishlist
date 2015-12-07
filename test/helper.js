@@ -19,7 +19,7 @@
     }
 
     function pathsExist(fs, paths) {
-        return Promise.all(paths.map(function(path) {
+        return Promise.all(paths.map(function (path) {
             return new Promise(function (resolve) {
                 fs.exists(path, resolve);
             });

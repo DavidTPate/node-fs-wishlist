@@ -23,18 +23,16 @@
     describe('#rmdirp', function () {
         beforeEach(function () {
             return mixedFs.rmdirp(testFolder)
-                .then(function() {
+                .then(function () {
                     return mixedFs.mkdirp(testFolder);
                 });
-        });
-        afterEach(function () {
-            return mixedFs.rmdirp(testFolder);
         });
         it('should mixin rmdirp by default', function () {
             expect(lib.mixin(fs)).to.have.property('rmdirp');
         });
         it('shouldn\'t mixin rmdirp when already implemented', function () {
-            var rmdirpFunc = function() {};
+            var rmdirpFunc = function () {
+            };
             expect(lib.mixin(extend({}, fs, {rmdirp: rmdirpFunc})).rmdirp).to.equal(rmdirpFunc);
         });
         it('should mixin rmdirp when included', function () {

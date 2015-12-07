@@ -23,12 +23,9 @@
     describe('#readdirp', function () {
         beforeEach(function () {
             return mixedFs.rmdirp(testFolder)
-                .then(function() {
+                .then(function () {
                     return mixedFs.mkdirp(testFolder);
                 });
-        });
-        afterEach(function () {
-            return mixedFs.rmdirp(testFolder);
         });
         it('should mixin readdirp by default', function () {
             expect(lib.mixin(fs)).to.have.property('readdirp');
