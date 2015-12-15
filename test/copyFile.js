@@ -1,17 +1,7 @@
-(function (chai, chaiAsPromised, dirtyChai, Promise, lib, fs, extend) {
+(function (chai, chaiAsPromised, dirtyChai, Promise, lib, fs, extend, helper) {
     'use strict';
 
-    if (!fs.existsAsync) {
-        fs = Promise.promisifyAll(fs);
-
-        fs.existsAsync = function (path) {
-            return new Promise(function (resolve, reject) {
-                fs.exists(path, function (exists) {
-                    resolve(exists);
-                });
-            });
-        };
-    }
+    fs = Promise.promisifyAll(fs);
 
     chai.use(chaiAsPromised);
     chai.use(dirtyChai);
@@ -47,17 +37,17 @@
             }).then(function () {
                 return lib.mixin(fs).copyFile(testFolder + '/one/2.txt', testFolder + '/two/3.txt');
             }).then(function () {
-                return Promise.all([
-                    fs.existsAsync(testFolder + '/one'),
-                    fs.existsAsync(testFolder + '/one/2.txt'),
-                    fs.existsAsync(testFolder + '/two'),
-                    fs.existsAsync(testFolder + '/two/3.txt')
+                return helper.pathsExist(fs, [
+                    testFolder + '/one',
+                    testFolder + '/one/2.txt',
+                    testFolder + '/two',
+                    testFolder + '/two/3.txt'
                 ]).then(function (results) {
-                    return new Promise(function (resolve, reject) {
+                    return new Promise(function (resolve) {
                         expect(results).to.deep.equal([true, true, true, true]);
-                        resolve(Promise.all([
-                            fs.readFileAsync(testFolder + '/one/2.txt'),
-                            fs.readFileAsync(testFolder + '/two/3.txt')
+                        resolve(helper.readFiles(fs, [
+                            testFolder + '/one/2.txt',
+                            testFolder + '/two/3.txt'
                         ]).spread(function (original, copied) {
                             expect(original.toString()).to.equal(copied.toString());
                         }));
@@ -75,17 +65,17 @@
                             return reject(err);
                         }
 
-                        resolve(Promise.all([
-                            fs.existsAsync(testFolder + '/one'),
-                            fs.existsAsync(testFolder + '/one/2.txt'),
-                            fs.existsAsync(testFolder + '/two'),
-                            fs.existsAsync(testFolder + '/two/3.txt')
+                        return resolve(helper.pathsExist(fs, [
+                            testFolder + '/one',
+                            testFolder + '/one/2.txt',
+                            testFolder + '/two',
+                            testFolder + '/two/3.txt'
                         ]).then(function (results) {
                             return new Promise(function (readFileResolve) {
                                 expect(results).to.deep.equal([true, true, true, true]);
-                                readFileResolve(Promise.all([
-                                    fs.readFileAsync(testFolder + '/one/2.txt'),
-                                    fs.readFileAsync(testFolder + '/two/3.txt')
+                                readFileResolve(helper.readFiles(fs, [
+                                    testFolder + '/one/2.txt',
+                                    testFolder + '/two/3.txt'
                                 ]).spread(function (original, copied) {
                                     expect(original.toString()).to.equal(copied.toString());
                                 }));
@@ -117,4 +107,4 @@
             });
         });
     });
-}(require('chai'), require('chai-as-promised'), require('dirty-chai'), require('bluebird'), require('../index'), require('fs'), require('extend')));
+}(require('chai'), require('chai-as-promised'), require('dirty-chai'), require('bluebird'), require('../index'), require('fs'), require('extend'), require('./helper')));

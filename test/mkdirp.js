@@ -1,17 +1,7 @@
-(function (chai, chaiAsPromised, dirtyChai, Promise, lib, fs, extend) {
+(function (chai, chaiAsPromised, dirtyChai, Promise, lib, fs, extend, helper) {
     'use strict';
 
-    if (!fs.existsAsync) {
-        fs = Promise.promisifyAll(fs);
-
-        fs.existsAsync = function (path) {
-            return new Promise(function (resolve, reject) {
-                fs.exists(path, function (exists) {
-                    resolve(exists);
-                });
-            });
-        };
-    }
+    fs = Promise.promisifyAll(fs);
 
     chai.use(chaiAsPromised);
     chai.use(dirtyChai);
@@ -43,21 +33,12 @@
         });
         it('should be able to recursively make directories', function () {
             return lib.mixin(fs).mkdirp(testFolder + '/one/two/three/four').then(function () {
-                return Promise.all([
-                    fs.existsAsync(testFolder + '/one'),
-                    fs.existsAsync(testFolder + '/one/two'),
-                    fs.existsAsync(testFolder + '/one/two/three'),
-                    fs.existsAsync(testFolder + '/one/two/three/four')
-                ]).spread(function (one, two, three, four) {
-                    return new Promise(function (resolve) {
-                        expect(one).to.be.ok();
-                        expect(two).to.be.ok();
-                        expect(three).to.be.ok();
-                        expect(four).to.be.ok();
-
-                        resolve();
-                    });
-                });
+                return expect(helper.pathsExist(fs, [
+                    testFolder + '/one',
+                    testFolder + '/one/two',
+                    testFolder + '/one/two/three',
+                    testFolder + '/one/two/three/four'
+                ])).to.eventually.deep.equal([true, true, true, true]);
             });
         });
         it('should be able to recursively make directories with a callback', function () {
@@ -66,18 +47,16 @@
                     if (err) {
                         return reject(err);
                     }
-                    resolve(fs.existsAsync(testFolder + '/one').then(function (exists) {
-                        return expect(exists).to.be.ok();
-                    }));
+                    return resolve(expect(helper.pathsExist(fs, [testFolder + '/one'])).to.eventually.deep.equal([true]));
                 });
             });
         });
         it('should be able to recursively make directories with a mode', function () {
             var mode = parseInt('0776', 8);
             return lib.mixin(fs).mkdirp(testFolder + '/one/two', mode).then(function () {
-                return Promise.all([
-                    fs.existsAsync(testFolder + '/one'),
-                    fs.existsAsync(testFolder + '/one/two')
+                return helper.pathsExist(fs, [
+                    testFolder + '/one',
+                    testFolder + '/one/two'
                 ]).spread(function (one, two) {
                     expect(one).to.be.ok();
                     expect(two).to.be.ok();
@@ -86,7 +65,7 @@
                         fs.statAsync(testFolder + '/one'),
                         fs.statAsync(testFolder + '/one/two')
                     ]).spread(function (oneStats, twoStats) {
-                        return new Promise(function (resolve, reject) {
+                        return new Promise(function (resolve) {
                             expect(oneStats).to.be.ok();
                             expect(twoStats).to.be.ok();
 
@@ -106,7 +85,7 @@
                     if (err) {
                         return reject(err);
                     }
-                    resolve(fs.existsAsync(testFolder + '/one').then(function (exists) {
+                    resolve(helper.pathsExist(fs, [testFolder + '/one']).spread(function (exists) {
                         expect(exists).to.be.ok();
 
                         return fs.statAsync(testFolder + '/one').then(function (stats) {
@@ -137,4 +116,4 @@
             });
         });
     });
-}(require('chai'), require('chai-as-promised'), require('dirty-chai'), require('bluebird'), require('../index'), require('fs'), require('extend')));
+}(require('chai'), require('chai-as-promised'), require('dirty-chai'), require('bluebird'), require('../index'), require('fs'), require('extend'), require('./helper')));

@@ -1,17 +1,7 @@
-(function (chai, chaiAsPromised, dirtyChai, Promise, lib, fs, extend) {
+(function (chai, chaiAsPromised, dirtyChai, Promise, lib, fs, extend, helper) {
     'use strict';
 
-    if (!fs.existsAsync) {
-        fs = Promise.promisifyAll(fs);
-
-        fs.existsAsync = function (path) {
-            return new Promise(function (resolve, reject) {
-                fs.exists(path, function (exists) {
-                    resolve(exists);
-                });
-            });
-        };
-    }
+    fs = Promise.promisifyAll(fs);
 
     chai.use(chaiAsPromised);
     chai.use(dirtyChai);
@@ -42,15 +32,13 @@
             expect(lib.mixin(fs, {mixins: {readdirp: false}})).to.not.have.property('readdirp');
         });
         it('should be able to recursively read directories', function () {
-            return fs.mkdirAsync(testFolder + '/one').then(function () {
-                return fs.mkdirAsync(testFolder + '/one/two').then(function () {
-                    return fs.mkdirAsync(testFolder + '/one/two/three').then(function () {
-                        return fs.mkdirAsync(testFolder + '/one/two/three/four').then(function () {
-                            return fs.mkdirAsync(testFolder + '/one/two/three/four/five');
-                        });
-                    });
-                });
-            }).then(function () {
+            return helper.createDirectories(fs, [
+                testFolder + '/one',
+                testFolder + '/one/two',
+                testFolder + '/one/two/three',
+                testFolder + '/one/two/three/four',
+                testFolder + '/one/two/three/four/five'
+            ]).then(function () {
                 return Promise.all([
                     fs.writeFileAsync(testFolder + '/1.txt', 'The impossible often has a kind of integrity to it which the merely improbable lacks.'),
                     fs.writeFileAsync(testFolder + '/one/2.txt', 'It can be very dangerous to see things from somebody else\'s point of view without the proper training.'),
@@ -60,9 +48,7 @@
                     fs.writeFileAsync(testFolder + '/one/two/three/four/6.txt', 'Anything that thinks logically can be fooled by something else that thinks at least as logically as it does.')
                 ]);
             }).then(function () {
-                return lib.mixin(fs).readdirp(testFolder + '/one');
-            }).then(function (files) {
-                expect(files).to.deep.equal([
+                return expect(lib.mixin(fs).readdirp(testFolder + '/one')).to.eventually.deep.equal([
                     testFolder + '/one',
                     testFolder + '/one/2.txt',
                     testFolder + '/one/two',
@@ -74,7 +60,6 @@
                     testFolder + '/one/two/three/four/6.txt',
                     testFolder + '/one/two/three/four/five'
                 ]);
-                return true;
             });
         });
         it('should be able to recursively read directories with a callback', function () {
@@ -112,4 +97,4 @@
             });
         });
     });
-}(require('chai'), require('chai-as-promised'), require('dirty-chai'), require('bluebird'), require('../index'), require('fs'), require('extend')));
+}(require('chai'), require('chai-as-promised'), require('dirty-chai'), require('bluebird'), require('../index'), require('fs'), require('extend'), require('./helper')));

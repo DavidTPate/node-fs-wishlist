@@ -1,15 +1,7 @@
 (function (chai, chaiAsPromised, dirtyChai, Promise, lib, fs, extend, helper) {
     'use strict';
 
-    if (!fs.existsAsync) {
-        fs = Promise.promisifyAll(fs);
-
-        fs.existsAsync = function (path) {
-            return new Promise(function (resolve) {
-                fs.exists(path, resolve);
-            });
-        };
-    }
+    fs = Promise.promisifyAll(fs);
 
     chai.use(chaiAsPromised);
     chai.use(dirtyChai);
@@ -116,9 +108,9 @@
                     });
                 });
             }).then(function () {
-                return Promise.all([
-                    fs.existsAsync(testFolder + '/one'),
-                    fs.existsAsync(testFolder + '/anotherOne')
+                return helper.pathsExist(fs, [
+                    testFolder + '/one',
+                    testFolder + '/anotherOne'
                 ]).then(function (results) {
                     expect(results).to.deep.equal([true, true]);
                 });
@@ -146,7 +138,7 @@
         });
         it('should propagate an error from a mkdir call', function () {
             var xfs = extend({}, mixedFs, {
-                mkdir: function (dir, cb) {
+                mkdir: function (dir, mode, cb) {
                     cb(new Error('Some Mkdir Error'));
                 }
             });

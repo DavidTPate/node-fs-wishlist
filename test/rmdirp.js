@@ -1,17 +1,7 @@
-(function (chai, chaiAsPromised, dirtyChai, Promise, lib, fs, extend) {
+(function (chai, chaiAsPromised, dirtyChai, Promise, lib, fs, extend, helper) {
     'use strict';
 
-    if (!fs.existsAsync) {
-        fs = Promise.promisifyAll(fs);
-
-        fs.existsAsync = function (path) {
-            return new Promise(function (resolve, reject) {
-                fs.exists(path, function (exists) {
-                    resolve(exists);
-                });
-            });
-        };
-    }
+    fs = Promise.promisifyAll(fs);
 
     chai.use(chaiAsPromised);
     chai.use(dirtyChai);
@@ -42,15 +32,13 @@
             expect(lib.mixin(fs, {mixins: {rmdirp: false}})).to.not.have.property('rmdirp');
         });
         it('should be able to recursively remove directories', function () {
-            return fs.mkdirAsync(testFolder + '/one').then(function () {
-                return fs.mkdirAsync(testFolder + '/one/two').then(function () {
-                    return fs.mkdirAsync(testFolder + '/one/two/three').then(function () {
-                        return fs.mkdirAsync(testFolder + '/one/two/three/four').then(function () {
-                            return fs.mkdirAsync(testFolder + '/one/two/three/four/five');
-                        });
-                    });
-                });
-            }).then(function () {
+            return helper.createDirectories(fs, [
+                testFolder + '/one',
+                testFolder + '/one/two',
+                testFolder + '/one/two/three',
+                testFolder + '/one/two/three/four',
+                testFolder + '/one/two/three/four/five'
+            ]).then(function () {
                 return Promise.all([
                     fs.writeFileAsync(testFolder + '/1.txt', 'The impossible often has a kind of integrity to it which the merely improbable lacks.'),
                     fs.writeFileAsync(testFolder + '/one/2.txt', 'It can be very dangerous to see things from somebody else\'s point of view without the proper training.'),
@@ -62,24 +50,19 @@
             }).then(function () {
                 return lib.mixin(fs).rmdirp(testFolder + '/one');
             }).then(function () {
-                return Promise.all([
-                    fs.existsAsync(testFolder + '/1.txt'),
-                    fs.existsAsync(testFolder + '/one'),
-                    fs.existsAsync(testFolder + '/one/2.txt'),
-                    fs.existsAsync(testFolder + '/one/two'),
-                    fs.existsAsync(testFolder + '/one/two/3.txt'),
-                    fs.existsAsync(testFolder + '/one/two/three'),
-                    fs.existsAsync(testFolder + '/one/two/three/4.txt'),
-                    fs.existsAsync(testFolder + '/one/two/three/four'),
-                    fs.existsAsync(testFolder + '/one/two/three/four/5.txt'),
-                    fs.existsAsync(testFolder + '/one/two/three/four/6.txt'),
-                    fs.existsAsync(testFolder + '/one/two/three/four/five')
-                ]).then(function (results) {
-                    return new Promise(function (resolve, reject) {
-                        expect(results).to.deep.equal([true, false, false, false, false, false, false, false, false, false, false]);
-                        resolve();
-                    });
-                });
+                return expect(helper.pathsExist(fs, [
+                    testFolder + '/1.txt',
+                    testFolder + '/one',
+                    testFolder + '/one/2.txt',
+                    testFolder + '/one/two',
+                    testFolder + '/one/two/3.txt',
+                    testFolder + '/one/two/three',
+                    testFolder + '/one/two/three/4.txt',
+                    testFolder + '/one/two/three/four',
+                    testFolder + '/one/two/three/four/5.txt',
+                    testFolder + '/one/two/three/four/6.txt',
+                    testFolder + '/one/two/three/four/five'
+                ])).to.eventually.deep.equal([true, false, false, false, false, false, false, false, false, false, false]);
             });
         });
         it('should be able to recursively remove directories with a callback', function () {
@@ -93,7 +76,7 @@
                     });
                 });
             }).then(function () {
-                return expect(fs.existsAsync(testFolder + '/one')).to.eventually.equal(false);
+                return expect(helper.pathsExist(fs, [testFolder + '/one'])).to.eventually.deep.equal([false]);
             });
         });
         it('shouldn\'t be able to remove a directory that already exists and isn\'t a directory', function () {
@@ -141,4 +124,4 @@
             });
         });
     });
-}(require('chai'), require('chai-as-promised'), require('dirty-chai'), require('bluebird'), require('../index'), require('fs'), require('extend')));
+}(require('chai'), require('chai-as-promised'), require('dirty-chai'), require('bluebird'), require('../index'), require('fs'), require('extend'), require('./helper')));
