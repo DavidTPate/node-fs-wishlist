@@ -1,19 +1,26 @@
 (function (Promise) {
     'use strict';
+
+    function readFiles(fs, files) {
+        return Promise.map(files, function(file) {
+           return fs.readFileAsync(file);
+        });
+    }
+
     function createDirectories(fs, directories) {
-        return Promise.all(directories).each(function (directory) {
+        return Promise.each(directories, function (directory) {
             return fs.mkdirAsync(directory);
         });
     }
 
     function deleteDirectories(fs, directories) {
-        return Promise.all(directories).each(function (directory) {
+        return Promise.each(directories, function (directory) {
             return fs.rmdirAsync(directory);
         });
     }
 
     function unlinkPaths(fs, paths) {
-        return Promise.all(paths).each(function (path) {
+        return Promise.each(paths, function (path) {
             return fs.unlinkAsync(path);
         });
     }
@@ -27,6 +34,7 @@
     }
 
     module.exports = {
+        readFiles: readFiles,
         createDirectories: createDirectories,
         deleteDirectories: deleteDirectories,
         pathsExist: pathsExist,

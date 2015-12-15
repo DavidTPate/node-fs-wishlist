@@ -81,20 +81,22 @@
                 ]).then(function (results) {
                     expect(results).to.deep.equal([true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true]);
                     return Promise.all([
-                        Promise.all([
-                            fs.readFileAsync(testFolder + '/one/2.txt'),
-                            fs.readFileAsync(testFolder + '/one/two/3.txt'),
-                            fs.readFileAsync(testFolder + '/one/two/three/4.txt'),
-                            fs.readFileAsync(testFolder + '/one/two/three/four/5.txt'),
-                            fs.readFileAsync(testFolder + '/one/two/three/four/6.txt')
-                        ]),
-                        Promise.all([
-                            fs.readFileAsync(testFolder + '/anotherOne/2.txt'),
-                            fs.readFileAsync(testFolder + '/anotherOne/two/3.txt'),
-                            fs.readFileAsync(testFolder + '/anotherOne/two/three/4.txt'),
-                            fs.readFileAsync(testFolder + '/anotherOne/two/three/four/5.txt'),
-                            fs.readFileAsync(testFolder + '/anotherOne/two/three/four/6.txt')
-                        ])
+                        helper.readFiles(fs,
+                            [
+                                testFolder + '/one/2.txt',
+                                testFolder + '/one/two/3.txt',
+                                testFolder + '/one/two/three/4.txt',
+                                testFolder + '/one/two/three/four/5.txt',
+                                testFolder + '/one/two/three/four/6.txt'
+                            ]),
+                        helper.readFiles(fs,
+                            [
+                                testFolder + '/anotherOne/2.txt',
+                                testFolder + '/anotherOne/two/3.txt',
+                                testFolder + '/anotherOne/two/three/4.txt',
+                                testFolder + '/anotherOne/two/three/four/5.txt',
+                                testFolder + '/anotherOne/two/three/four/6.txt'
+                            ])
                     ]).spread(function (originalFiles, copiedFiles) {
                         for (var i = 0; i < originalFiles.length; i++) {
                             expect(originalFiles[i].toString()).to.equal(copiedFiles[i].toString());
