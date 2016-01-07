@@ -1,35 +1,28 @@
-(function (chai, chaiAsPromised, dirtyChai, Promise, lib, fs, extend) {
+(function (chai, chaiAsPromised, dirtyChai, Promise, lib, fs, extend, helper) {
     'use strict';
 
-    if (!fs.existsAsync) {
-        fs = Promise.promisifyAll(fs);
-
-        fs.existsAsync = function (path) {
-            return new Promise(function (resolve, reject) {
-                fs.exists(path, function (exists) {
-                    resolve(exists);
-                });
-            });
-        };
-    }
+    fs = Promise.promisifyAll(fs);
 
     chai.use(chaiAsPromised);
     chai.use(dirtyChai);
-    var expect = chai.expect,
-        testFolder = 'test/mock';
+
+    var expect = chai.expect;
+    var testFolder = 'test/mock';
+    var mixedFs = lib.mixin(fs);
 
     describe('#mkdirp', function () {
         beforeEach(function () {
-            return fs.mkdirAsync(testFolder);
-        });
-        afterEach(function () {
-            return fs.rmdirAsync(testFolder);
+            return mixedFs.rmdirp(testFolder)
+                .then(function () {
+                    return mixedFs.mkdirp(testFolder);
+                });
         });
         it('should mixin mkdirp by default', function () {
             expect(lib.mixin(fs)).to.have.property('mkdirp');
         });
         it('shouldn\'t mixin mkdirp when already implemented', function () {
-            var mkdirpFunc = function() {};
+            var mkdirpFunc = function () {
+            };
             expect(lib.mixin(extend({}, fs, {mkdirp: mkdirpFunc})).mkdirp).to.equal(mkdirpFunc);
         });
         it('should mixin mkdirp when included', function () {
@@ -40,29 +33,12 @@
         });
         it('should be able to recursively make directories', function () {
             return lib.mixin(fs).mkdirp(testFolder + '/one/two/three/four').then(function () {
-                return Promise.all([
-                    fs.existsAsync(testFolder + '/one'),
-                    fs.existsAsync(testFolder + '/one/two'),
-                    fs.existsAsync(testFolder + '/one/two/three'),
-                    fs.existsAsync(testFolder + '/one/two/three/four')
-                ]).spread(function (one, two, three, four) {
-                    return new Promise(function (resolve, reject) {
-                        expect(one).to.be.ok();
-                        expect(two).to.be.ok();
-                        expect(three).to.be.ok();
-                        expect(four).to.be.ok();
-
-                        resolve();
-                    });
-                });
-            }).finally(function () {
-                return fs.rmdirAsync(testFolder + '/one/two/three/four').then(function () {
-                    return fs.rmdirAsync(testFolder + '/one/two/three').then(function () {
-                        return fs.rmdirAsync(testFolder + '/one/two').then(function () {
-                            return fs.rmdirAsync(testFolder + '/one');
-                        });
-                    });
-                });
+                return expect(helper.pathsExist(fs, [
+                    testFolder + '/one',
+                    testFolder + '/one/two',
+                    testFolder + '/one/two/three',
+                    testFolder + '/one/two/three/four'
+                ])).to.eventually.deep.equal([true, true, true, true]);
             });
         });
         it('should be able to recursively make directories with a callback', function () {
@@ -71,20 +47,16 @@
                     if (err) {
                         return reject(err);
                     }
-                    resolve(fs.existsAsync(testFolder + '/one').then(function (exists) {
-                        return expect(exists).to.be.ok();
-                    }));
+                    return resolve(expect(helper.pathsExist(fs, [testFolder + '/one'])).to.eventually.deep.equal([true]));
                 });
-            }).finally(function () {
-                    return fs.rmdirAsync(testFolder + '/one');
-                });
+            });
         });
         it('should be able to recursively make directories with a mode', function () {
             var mode = parseInt('0776', 8);
             return lib.mixin(fs).mkdirp(testFolder + '/one/two', mode).then(function () {
-                return Promise.all([
-                    fs.existsAsync(testFolder + '/one'),
-                    fs.existsAsync(testFolder + '/one/two')
+                return helper.pathsExist(fs, [
+                    testFolder + '/one',
+                    testFolder + '/one/two'
                 ]).spread(function (one, two) {
                     expect(one).to.be.ok();
                     expect(two).to.be.ok();
@@ -93,20 +65,16 @@
                         fs.statAsync(testFolder + '/one'),
                         fs.statAsync(testFolder + '/one/two')
                     ]).spread(function (oneStats, twoStats) {
-                        return new Promise(function (resolve, reject) {
+                        return new Promise(function (resolve) {
                             expect(oneStats).to.be.ok();
                             expect(twoStats).to.be.ok();
 
-                            expect(oneStats.mode & mode).to.equal(mode & (~process.umask()));
-                            expect(twoStats.mode & mode).to.equal(mode & (~process.umask()));
+                            expect(oneStats.mode & mode).to.equal(mode & ~process.umask());
+                            expect(twoStats.mode & mode).to.equal(mode & ~process.umask());
 
                             resolve();
                         });
                     });
-                });
-            }).finally(function () {
-                return fs.rmdirAsync(testFolder + '/one/two').then(function () {
-                    return fs.rmdirAsync(testFolder + '/one');
                 });
             });
         });
@@ -117,39 +85,35 @@
                     if (err) {
                         return reject(err);
                     }
-                    resolve(fs.existsAsync(testFolder + '/one').then(function (exists) {
+                    resolve(helper.pathsExist(fs, [testFolder + '/one']).spread(function (exists) {
                         expect(exists).to.be.ok();
 
                         return fs.statAsync(testFolder + '/one').then(function (stats) {
-                            expect(stats.mode & mode).to.equal(mode & (~process.umask()));
+                            expect(stats.mode & mode).to.equal(mode & ~process.umask());
                         });
                     }));
                 });
-            }).finally(function () {
-                    return fs.rmdirAsync(testFolder + '/one');
-                });
+            });
         });
         it('shouldn\'t be able to overwrite a directory that already exists and isn\'t a directory', function () {
-            return fs.writeFileAsync(testFolder + '/one').then(function() {
+            return fs.writeFileAsync(testFolder + '/one').then(function () {
                 return expect(lib.mixin(fs).mkdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Path test/mock/one already exists and is not a directory');
-            }).finally(function() {
-                return fs.unlink(testFolder + '/one');
             });
         });
         it('should be able to able to create a directory that already exists', function () {
-            return fs.mkdirAsync(testFolder + '/one').then(function() {
+            return fs.mkdirAsync(testFolder + '/one').then(function () {
                 return expect(lib.mixin(fs).mkdirp(testFolder + '/one')).to.eventually.be.fulfilled();
-            }).finally(function() {
-                return fs.rmdir(testFolder + '/one');
             });
         });
         it('should propagate an error from a stats call', function () {
-            var xfs = extend({}, lib.mixin(fs), { stat: function(dir, cb) { cb(new Error('Some Stats Error')); } });
-            return fs.mkdirAsync(testFolder + '/one').then(function() {
+            var xfs = extend({}, lib.mixin(fs), {
+                stat: function (dir, cb) {
+                    cb(new Error('Some Stats Error'));
+                }
+            });
+            return fs.mkdirAsync(testFolder + '/one').then(function () {
                 return expect(xfs.mkdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Some Stats Error');
-            }).finally(function() {
-                return fs.rmdir(testFolder + '/one');
             });
         });
     });
-}(require('chai'), require('chai-as-promised'), require('dirty-chai'), require('bluebird'), require('../index'), require('fs'), require('extend')));
+}(require('chai'), require('chai-as-promised'), require('dirty-chai'), require('bluebird'), require('../index'), require('fs'), require('extend'), require('./helper')));

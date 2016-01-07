@@ -1,30 +1,21 @@
-(function (chai, chaiAsPromised, dirtyChai, Promise, lib, fs, extend) {
+(function (chai, chaiAsPromised, dirtyChai, Promise, lib, fs, extend, helper) {
     'use strict';
 
-    if (!fs.existsAsync) {
-        fs = Promise.promisifyAll(fs);
-
-        fs.existsAsync = function (path) {
-            return new Promise(function (resolve, reject) {
-                fs.exists(path, function (exists) {
-                    resolve(exists);
-                });
-            });
-        };
-    }
+    fs = Promise.promisifyAll(fs);
 
     chai.use(chaiAsPromised);
     chai.use(dirtyChai);
 
-    var expect = chai.expect,
-        testFolder = 'test/mock';
+    var expect = chai.expect;
+    var testFolder = 'test/mock';
+    var mixedFs = lib.mixin(fs);
 
     describe('#copyFile', function () {
         beforeEach(function () {
-            return fs.mkdirAsync(testFolder);
-        });
-        afterEach(function () {
-            return fs.rmdirAsync(testFolder);
+            return mixedFs.rmdirp(testFolder)
+                .then(function () {
+                    return mixedFs.mkdirp(testFolder);
+                });
         });
         it('should mixin copyFile by default', function () {
             expect(lib.mixin(fs)).to.have.property('copyFile');
@@ -46,31 +37,21 @@
             }).then(function () {
                 return lib.mixin(fs).copyFile(testFolder + '/one/2.txt', testFolder + '/two/3.txt');
             }).then(function () {
-                return Promise.all([
-                    fs.existsAsync(testFolder + '/one'),
-                    fs.existsAsync(testFolder + '/one/2.txt'),
-                    fs.existsAsync(testFolder + '/two'),
-                    fs.existsAsync(testFolder + '/two/3.txt')
+                return helper.pathsExist(fs, [
+                    testFolder + '/one',
+                    testFolder + '/one/2.txt',
+                    testFolder + '/two',
+                    testFolder + '/two/3.txt'
                 ]).then(function (results) {
-                    return new Promise(function (resolve, reject) {
+                    return new Promise(function (resolve) {
                         expect(results).to.deep.equal([true, true, true, true]);
-                        resolve(Promise.all([
-                            fs.readFileAsync(testFolder + '/one/2.txt'),
-                            fs.readFileAsync(testFolder + '/two/3.txt')
+                        resolve(helper.readFiles(fs, [
+                            testFolder + '/one/2.txt',
+                            testFolder + '/two/3.txt'
                         ]).spread(function (original, copied) {
                             expect(original.toString()).to.equal(copied.toString());
                         }));
                     });
-                });
-            }).finally(function () {
-                return Promise.all([
-                    fs.unlinkAsync(testFolder + '/one/2.txt'),
-                    fs.unlinkAsync(testFolder + '/two/3.txt')
-                ]).then(function () {
-                    return Promise.all([
-                        fs.rmdirAsync(testFolder + '/one'),
-                        fs.rmdirAsync(testFolder + '/two')
-                    ]);
                 });
             });
         });
@@ -84,17 +65,17 @@
                             return reject(err);
                         }
 
-                        resolve(Promise.all([
-                            fs.existsAsync(testFolder + '/one'),
-                            fs.existsAsync(testFolder + '/one/2.txt'),
-                            fs.existsAsync(testFolder + '/two'),
-                            fs.existsAsync(testFolder + '/two/3.txt')
+                        return resolve(helper.pathsExist(fs, [
+                            testFolder + '/one',
+                            testFolder + '/one/2.txt',
+                            testFolder + '/two',
+                            testFolder + '/two/3.txt'
                         ]).then(function (results) {
                             return new Promise(function (readFileResolve) {
                                 expect(results).to.deep.equal([true, true, true, true]);
-                                readFileResolve(Promise.all([
-                                    fs.readFileAsync(testFolder + '/one/2.txt'),
-                                    fs.readFileAsync(testFolder + '/two/3.txt')
+                                readFileResolve(helper.readFiles(fs, [
+                                    testFolder + '/one/2.txt',
+                                    testFolder + '/two/3.txt'
                                 ]).spread(function (original, copied) {
                                     expect(original.toString()).to.equal(copied.toString());
                                 }));
@@ -102,27 +83,15 @@
                         }));
                     });
                 });
-            }).finally(function () {
-                return Promise.all([
-                    fs.unlinkAsync(testFolder + '/one/2.txt'),
-                    fs.unlinkAsync(testFolder + '/two/3.txt')
-                ]).then(function () {
-                    return Promise.all([
-                        fs.rmdirAsync(testFolder + '/one'),
-                        fs.rmdirAsync(testFolder + '/two')
-                    ]);
-                });
             });
         });
         it('shouldn\'t be able to copy a directory', function () {
-            return fs.mkdirAsync(testFolder + '/one').then(function() {
+            return fs.mkdirAsync(testFolder + '/one').then(function () {
                 return expect(lib.mixin(fs).copyFile(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Path test/mock/one is not a file');
-            }).finally(function () {
-                return fs.rmdirAsync(testFolder + '/one');
             });
         });
         it('shouldn\'t be able to copy a file that doesn\'t exist', function () {
-            return expect(lib.mixin(fs).copyFile(testFolder + '/one/1.txt')).to.eventually.be.rejectedWith(Error, /^ENOENT/);
+            return expect(lib.mixin(fs).copyFile(testFolder + '/one/1.txt')).to.eventually.be.rejectedWith(Error, /ENOENT/);
         });
         it('should propagate an error from a stats call', function () {
             var xfs = extend({}, lib.mixin(fs), {
@@ -135,11 +104,7 @@
                 fs.writeFileAsync(testFolder + '/one/1.txt', 'In an infinite Universe anything can happen.')
             ]).then(function () {
                 return expect(xfs.copyFile(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Some Stats Error');
-            }).finally(function () {
-                return fs.unlinkAsync(testFolder + '/one/1.txt').then(function () {
-                    return fs.rmdir(testFolder + '/one');
-                });
             });
         });
     });
-}(require('chai'), require('chai-as-promised'), require('dirty-chai'), require('bluebird'), require('../index'), require('fs'), require('extend')));
+}(require('chai'), require('chai-as-promised'), require('dirty-chai'), require('bluebird'), require('../index'), require('fs'), require('extend'), require('./helper')));
