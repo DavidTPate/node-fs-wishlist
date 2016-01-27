@@ -122,7 +122,7 @@ This overwrites the files if they already exist, and directories themselves are 
 ```js
 var xfs = require('fs-wishlist').replace();
 
-xfs.copyFile('/one', '/two').then(function() {
+xfs.copyDir('/one', '/two').then(function() {
   // All of the same directories created in the destination and the files are copied recursively
 }, function(reason) {
   // Something went wrong!
