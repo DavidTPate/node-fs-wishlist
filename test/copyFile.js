@@ -1,5 +1,5 @@
+'use strict';
 (function (chai, chaiAsPromised, dirtyChai, Promise, lib, fs, extend, helper) {
-    'use strict';
 
     fs = Promise.promisifyAll(fs);
 

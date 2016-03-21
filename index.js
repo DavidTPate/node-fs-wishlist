@@ -1,5 +1,5 @@
+'use strict';
 (function (module, extend, mkdirp, rmdirp, readdirp, copyFile, copyDir) {
-    'use strict';
 
     var availableMixins = {
         mkdirp: mkdirp,
