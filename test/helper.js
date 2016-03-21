@@ -1,5 +1,5 @@
+'use strict';
 (function (Promise) {
-    'use strict';
 
     function readFiles(fs, files) {
         return Promise.map(files, function(file) {

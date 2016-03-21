@@ -1,5 +1,5 @@
+'use strict';
 (function (chai, chaiAsPromised, dirtyChai, Promise, lib) {
-    'use strict';
 
     chai.use(chaiAsPromised);
     chai.use(dirtyChai);
