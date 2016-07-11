@@ -39,7 +39,7 @@
     "jscs": "^3.0.6",
     "jsinspect": "^0.x",
     "mocha": "^2.5.3",
-    "nsp": "^2.5.0"
+    "nsp": "^2.6.0"
   },
   "scripts": {
     "lint": "eslint . && jscs . && jsinspect . && buddy --detect-objects index.js ./lib",
