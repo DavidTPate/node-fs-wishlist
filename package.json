@@ -30,20 +30,14 @@
     "extend": "^3.x"
   },
   "devDependencies": {
-    "buddy.js": "^0.x",
     "chai": "^4.x",
     "chai-as-promised": "^7.1.1",
     "dirty-chai": "^2.0.1",
     "eslint": "^5.10.0",
     "istanbul": "^0.4.5",
-    "jscs": "^3.0.7",
-    "lab": "^18.0.0",
     "mocha": "^5.2.0"
   },
   "scripts": {
-    "lint": "eslint . && jscs . && buddy --detect-objects index.js ./lib",
-    "cover": "istanbul cover _mocha -- --check-leaks --recursive --timeout=25000 test && istanbul check-coverage --statements 100 --branches 100 --functions 100 --lines 100",
-    "test": "mocha --check-leaks --recursive --timeout=25000 test",
-    "test-ci": "npm run lint && npm run cover"
+    "test": "eslint . && istanbul cover _mocha -- --check-leaks --recursive --timeout=25000 test && istanbul check-coverage --statements 100 --branches 100 --functions 100 --lines 100"
   }
 }

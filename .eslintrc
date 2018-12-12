@@ -95,6 +95,7 @@
     "valid-typeof": 2,
     "wrap-iife": 2,
     "wrap-regex": 0,
-    "eol-last": 0
+    "eol-last": 0,
+    "no-magic-numbers": ["error", { "ignore":  [0]}]
   }
 }
