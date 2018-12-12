@@ -153,6 +153,18 @@ describe('#copyDir', function () {
     it('shouldn\'t be able to copy a directory that doesn\'t exist', function () {
         return expect(mixedFs.copyDir(testFolder + '/one', testFolder + '/anotherOne')).to.eventually.be.rejectedWith(Error, /ENOENT/);
     });
+    it('should propagate an error from a copyFile call', function () {
+        const xfs = extend({}, mixedFs, {
+            copyFile: (source, dest, cb) => {
+                cb(new Error('Some Copy File Error'));
+            }
+        });
+        return fs.mkdirAsync(testFolder + '/one').then(function () {
+            return fs.writeFileAsync(testFolder + '/one/1.txt', 'In an infinite Universe anything can happen.');
+        }).then(function () {
+            return expect(xfs.copyDir(testFolder + '/one', testFolder + '/two')).to.eventually.be.rejectedWith(Error, 'Some Copy File Error');
+        });
+    });
     it('should propagate an error from a stats call', function () {
         const xfs = extend({}, mixedFs, {
             stat: (dir, cb) => {
