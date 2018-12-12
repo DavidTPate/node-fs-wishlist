@@ -47,7 +47,7 @@ function mixin(fs, options) {
 
     const mixins = {};
 
-    Object.keys(opts.mixins).forEach(function (key) {
+    Object.keys(opts.mixins).forEach((key) => {
         if (opts.mixins[key]) {
             if (!fs[key]) {
                 mixins[key] = availableMixins[key];

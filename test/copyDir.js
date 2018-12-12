@@ -99,7 +99,7 @@ describe('#copyDir', function () {
                 testFolder + '/anotherOne/two/three/four/5.txt',
                 testFolder + '/anotherOne/two/three/four/6.txt',
                 testFolder + '/anotherOne/two/three/four/five'
-            ]).then(function (results) {
+            ]).then((results) => {
                 expect(results).to.deep.equal([true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true]);
                 return Promise.all([
                     helper.readFiles(fs,
@@ -118,7 +118,7 @@ describe('#copyDir', function () {
                             testFolder + '/anotherOne/two/three/four/5.txt',
                             testFolder + '/anotherOne/two/three/four/6.txt'
                         ])
-                ]).spread(function (originalFiles, copiedFiles) {
+                ]).spread((originalFiles, copiedFiles) => {
                     for (let i = 0; i < originalFiles.length; i++) {
                         expect(originalFiles[i].toString()).to.equal(copiedFiles[i].toString());
                     }
@@ -128,8 +128,8 @@ describe('#copyDir', function () {
     });
     it('should be able to recursively copy directories with a callback', function () {
         return fs.mkdirAsync(testFolder + '/one').then(function () {
-            return new Promise(function (resolve, reject) {
-                mixedFs.copyDir(testFolder + '/one', testFolder + '/anotherOne', function (err) {
+            return new Promise((resolve, reject) => {
+                mixedFs.copyDir(testFolder + '/one', testFolder + '/anotherOne', (err) => {
                     if (err) {
                         return reject(err);
                     }
@@ -140,7 +140,7 @@ describe('#copyDir', function () {
             return helper.pathsExist(fs, [
                 testFolder + '/one',
                 testFolder + '/anotherOne'
-            ]).then(function (results) {
+            ]).then((results) => {
                 expect(results).to.deep.equal([true, true]);
             });
         });
@@ -155,7 +155,7 @@ describe('#copyDir', function () {
     });
     it('should propagate an error from a stats call', function () {
         const xfs = extend({}, mixedFs, {
-            stat: function (dir, cb) {
+            stat: (dir, cb) => {
                 cb(new Error('Some Stats Error'));
             }
         });
@@ -167,7 +167,7 @@ describe('#copyDir', function () {
     });
     it('should propagate an error from a mkdir call', function () {
         const xfs = extend({}, mixedFs, {
-            mkdir: function (dir, mode, cb) {
+            mkdir: (dir, mode, cb) => {
                 cb(new Error('Some Mkdir Error'));
             }
         });

@@ -41,7 +41,7 @@ const mixedFs = lib.mixin(fs);
 describe('#readdirp', function () {
     beforeEach(function () {
         return mixedFs.rmdirp(testFolder)
-            .then(function () {
+            .then(() => {
                 return mixedFs.mkdirp(testFolder);
             });
     });
@@ -92,8 +92,8 @@ describe('#readdirp', function () {
     });
     it('should be able to recursively read directories with a callback', function () {
         return fs.mkdirAsync(testFolder + '/one').then(function () {
-            return new Promise(function (resolve, reject) {
-                lib.mixin(fs).readdirp(testFolder + '/one', function (err, files) {
+            return new Promise((resolve, reject) => {
+                lib.mixin(fs).readdirp(testFolder + '/one', (err, files) => {
                     if (err) {
                         return reject(err);
                     }
@@ -113,7 +113,7 @@ describe('#readdirp', function () {
     });
     it('should propagate an error from a stats call', function () {
         const xfs = extend({}, lib.mixin(fs), {
-            stat: function (dir, cb) {
+            stat: (dir, cb) => {
                 cb(new Error('Some Stats Error'));
             }
         });

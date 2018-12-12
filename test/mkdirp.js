@@ -70,8 +70,8 @@ describe('#mkdirp', function () {
         });
     });
     it('should be able to recursively make directories with a callback', function () {
-        return new Promise(function (resolve, reject) {
-            lib.mixin(fs).mkdirp(testFolder + '/one', function (err) {
+        return new Promise((resolve, reject) => {
+            lib.mixin(fs).mkdirp(testFolder + '/one', (err) => {
                 if (err) {
                     return reject(err);
                 }
@@ -85,15 +85,15 @@ describe('#mkdirp', function () {
             return helper.pathsExist(fs, [
                 testFolder + '/one',
                 testFolder + '/one/two'
-            ]).spread(function (one, two) {
+            ]).spread((one, two) => {
                 expect(one).to.be.ok();
                 expect(two).to.be.ok();
 
                 return Promise.all([
                     fs.statAsync(testFolder + '/one'),
                     fs.statAsync(testFolder + '/one/two')
-                ]).spread(function (oneStats, twoStats) {
-                    return new Promise(function (resolve) {
+                ]).spread((oneStats, twoStats) => {
+                    return new Promise((resolve) => {
                         expect(oneStats).to.be.ok();
                         expect(twoStats).to.be.ok();
 
@@ -108,15 +108,15 @@ describe('#mkdirp', function () {
     });
     it('should be able to recursively make directories with a mode and callback', function () {
         const mode = parseInt('0776', 8);
-        return new Promise(function (resolve, reject) {
-            lib.mixin(fs).mkdirp(testFolder + '/one', mode, function (err) {
+        return new Promise((resolve, reject) => {
+            lib.mixin(fs).mkdirp(testFolder + '/one', mode, (err) => {
                 if (err) {
                     return reject(err);
                 }
-                resolve(helper.pathsExist(fs, [testFolder + '/one']).spread(function (exists) {
+                resolve(helper.pathsExist(fs, [testFolder + '/one']).spread((exists) => {
                     expect(exists).to.be.ok();
 
-                    return fs.statAsync(testFolder + '/one').then(function (stats) {
+                    return fs.statAsync(testFolder + '/one').then((stats) => {
                         expect(stats.mode & mode).to.equal(mode & ~process.umask());
                     });
                 }));
@@ -135,7 +135,7 @@ describe('#mkdirp', function () {
     });
     it('should propagate an error from a stats call', function () {
         const xfs = extend({}, lib.mixin(fs), {
-            stat: function (dir, cb) {
+            stat: (dir, cb) => {
                 cb(new Error('Some Stats Error'));
             }
         });

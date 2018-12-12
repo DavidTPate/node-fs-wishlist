@@ -95,8 +95,8 @@ describe('#rmdirp', function () {
     });
     it('should be able to recursively remove directories with a callback', function () {
         return fs.mkdirAsync(testFolder + '/one').then(function () {
-            return new Promise(function (resolve, reject) {
-                lib.mixin(fs).rmdirp(testFolder + '/one', function (err) {
+            return new Promise((resolve, reject) => {
+                lib.mixin(fs).rmdirp(testFolder + '/one', (err) => {
                     if (err) {
                         return reject(err);
                     }
@@ -117,7 +117,7 @@ describe('#rmdirp', function () {
     });
     it('should propagate an error from a stats call', function () {
         const xfs = extend({}, lib.mixin(fs), {
-            stat: function (dir, cb) {
+            stat: (dir, cb) => {
                 cb(new Error('Some Stats Error'));
             }
         });
@@ -130,7 +130,7 @@ describe('#rmdirp', function () {
     });
     it('should propagate an error from an unlink call', function () {
         const xfs = extend({}, lib.mixin(fs), {
-            unlink: function (dir, cb) {
+            unlink: (dir, cb) => {
                 cb(new Error('Some Unlink Error'));
             }
         });
@@ -143,7 +143,7 @@ describe('#rmdirp', function () {
     });
     it('should propagate an error from a rmdir call', function () {
         const xfs = extend({}, lib.mixin(fs), {
-            rmdir: function (dir, cb) {
+            rmdir: (dir, cb) => {
                 cb(new Error('Some Rmdir Error'));
             }
         });
