@@ -22,47 +22,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-(function (module, extend, mkdirp, rmdirp, readdirp, copyDir) {
+const extend = require('extend');
+const mkdirp = require('./lib/mkdirp');
+const rmdirp = require('./lib/rmdirp');
+const readdirp = require('./lib/readdirp');
+const copyDir = require('./lib/copyDir');
 
-    var availableMixins = {
-        mkdirp: mkdirp,
-        rmdirp: rmdirp,
-        readdirp: readdirp,
-        copyDir: copyDir
-    };
+const availableMixins = {
+    mkdirp: mkdirp,
+    rmdirp: rmdirp,
+    readdirp: readdirp,
+    copyDir: copyDir
+};
 
-    function mixin(fs, options) {
-        var opts = extend({
-            mixins: {
-                mkdirp: true,
-                rmdirp: true,
-                readdirp: true,
-                copyDir: true
+function mixin(fs, options) {
+    const opts = extend({
+        mixins: {
+            mkdirp: true,
+            rmdirp: true,
+            readdirp: true,
+            copyDir: true
+        }
+    }, options || {});
+
+    const mixins = {};
+
+    Object.keys(opts.mixins).forEach(function (key) {
+        if (opts.mixins[key]) {
+            if (!fs[key]) {
+                mixins[key] = availableMixins[key];
             }
-        }, options || {});
+        }
+    });
 
-        var mixins = {};
+    return extend({}, fs, mixins);
+}
 
-        Object.keys(opts.mixins).forEach(function (key) {
-            if (opts.mixins[key]) {
-                if (!fs[key]) {
-                    mixins[key] = availableMixins[key];
-                }
-            }
-        });
-
-        return extend({}, fs, mixins);
-    }
-
-    function replace(options) {
-        require.cache.fs = {
-            exports: mixin(require('fs'), options)
-        };
-        return require.cache.fs.exports;
-    }
-
-    module.exports = {
-        mixin: mixin,
-        replace: replace
+function replace(options) {
+    require.cache.fs = {
+        exports: mixin(require('fs'), options)
     };
-}(module, require('extend'), require('./lib/mkdirp'), require('./lib/rmdirp'), require('./lib/readdirp'), require('./lib/copyDir')));
+    return require.cache.fs.exports;
+}
+
+module.exports = {
+    mixin: mixin,
+    replace: replace
+};
