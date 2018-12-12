@@ -25,7 +25,6 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const dirtyChai = require('dirty-chai');
-const Promise = require('bluebird');
 const lib = require('../index');
 
 chai.use(chaiAsPromised);

@@ -3,9 +3,12 @@
   "env": {
     "node": true,
     "mocha": true,
-    "amd": true
+    "amd": true,
+    "es6": true
   },
-
+  "parserOptions": {
+    "ecmaVersion": 2018
+  },
   "rules": {
     "no-restricted-modules": [2, "cluster"],
     "no-alert": 2,
