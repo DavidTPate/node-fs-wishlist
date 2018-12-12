@@ -39,35 +39,35 @@ const expect = chai.expect;
 const testFolder = 'test/mock';
 const mixedFs = lib.mixin(fs);
 
-describe('#copyDir', function () {
-    beforeEach(function () {
+describe('#copyDir', () => {
+    beforeEach(() => {
         return mixedFs.rmdirp(testFolder)
-            .then(function () {
+            .then(() => {
                 return mixedFs.mkdirp(testFolder);
             });
     });
-    it('should mixin copyDir by default', function () {
+    it('should mixin copyDir by default', () => {
         expect(mixedFs).to.have.property('copyDir');
     });
-    it('shouldn\'t mixin copyDir when already implemented', function () {
-        const copyDirFunc = function () {
+    it('shouldn\'t mixin copyDir when already implemented', () => {
+        const copyDirFunc = () => {
         };
         expect(lib.mixin(extend({}, fs, {copyDir: copyDirFunc})).copyDir).to.equal(copyDirFunc);
     });
-    it('should mixin copyDir when included', function () {
+    it('should mixin copyDir when included', () => {
         expect(lib.mixin(fs, {mixins: {copyDir: true}})).to.have.property('copyDir');
     });
-    it('shouldn\'t mixin copyDir when excluded', function () {
+    it('shouldn\'t mixin copyDir when excluded', () => {
         expect(lib.mixin(fs, {mixins: {copyDir: false}})).to.not.have.property('copyDir');
     });
-    it('should be able to recursively copy directories', function () {
+    it('should be able to recursively copy directories', () => {
         return helper.createDirectories(fs, [
             testFolder + '/one',
             testFolder + '/one/two',
             testFolder + '/one/two/three',
             testFolder + '/one/two/three/four',
             testFolder + '/one/two/three/four/five'
-        ]).then(function () {
+        ]).then(() => {
             return Promise.all([
                 fs.writeFileAsync(testFolder + '/one/2.txt', 'It can be very dangerous to see things from somebody else\'s point of view without the proper training.'),
                 fs.writeFileAsync(testFolder + '/one/two/3.txt', 'He was a dreamer, a thinker, a speculative philosopher... or, as his wife would have it, an idiot.'),
@@ -75,9 +75,9 @@ describe('#copyDir', function () {
                 fs.writeFileAsync(testFolder + '/one/two/three/four/5.txt', 'One is never alone with a rubber duck.'),
                 fs.writeFileAsync(testFolder + '/one/two/three/four/6.txt', 'Anything that thinks logically can be fooled by something else that thinks at least as logically as it does.')
             ]);
-        }).then(function () {
+        }).then(() => {
             return mixedFs.copyDir(testFolder + '/one', testFolder + '/anotherOne');
-        }).then(function () {
+        }).then(() => {
             return helper.pathsExist(fs, [
                 testFolder + '/one',
                 testFolder + '/one/2.txt',
@@ -126,8 +126,8 @@ describe('#copyDir', function () {
             });
         });
     });
-    it('should be able to recursively copy directories with a callback', function () {
-        return fs.mkdirAsync(testFolder + '/one').then(function () {
+    it('should be able to recursively copy directories with a callback', () => {
+        return fs.mkdirAsync(testFolder + '/one').then(() => {
             return new Promise((resolve, reject) => {
                 mixedFs.copyDir(testFolder + '/one', testFolder + '/anotherOne', (err) => {
                     if (err) {
@@ -136,7 +136,7 @@ describe('#copyDir', function () {
                     resolve();
                 });
             });
-        }).then(function () {
+        }).then(() => {
             return helper.pathsExist(fs, [
                 testFolder + '/one',
                 testFolder + '/anotherOne'
@@ -145,45 +145,45 @@ describe('#copyDir', function () {
             });
         });
     });
-    it('shouldn\'t be able to copy a directory that is actually a file', function () {
-        return fs.writeFileAsync(testFolder + '/one', 'I\'d far rather be happy than right anyday.').then(function () {
+    it('shouldn\'t be able to copy a directory that is actually a file', () => {
+        return fs.writeFileAsync(testFolder + '/one', 'I\'d far rather be happy than right anyday.').then(() => {
             return expect(mixedFs.copyDir(testFolder + '/one', testFolder + '/anotherOne')).to.eventually.be.rejectedWith(Error, /ENOTDIR/);
         });
     });
-    it('shouldn\'t be able to copy a directory that doesn\'t exist', function () {
+    it('shouldn\'t be able to copy a directory that doesn\'t exist', () => {
         return expect(mixedFs.copyDir(testFolder + '/one', testFolder + '/anotherOne')).to.eventually.be.rejectedWith(Error, /ENOENT/);
     });
-    it('should propagate an error from a copyFile call', function () {
+    it('should propagate an error from a copyFile call', () => {
         const xfs = extend({}, mixedFs, {
             copyFile: (source, dest, cb) => {
                 cb(new Error('Some Copy File Error'));
             }
         });
-        return fs.mkdirAsync(testFolder + '/one').then(function () {
+        return fs.mkdirAsync(testFolder + '/one').then(() => {
             return fs.writeFileAsync(testFolder + '/one/1.txt', 'In an infinite Universe anything can happen.');
-        }).then(function () {
+        }).then(() => {
             return expect(xfs.copyDir(testFolder + '/one', testFolder + '/two')).to.eventually.be.rejectedWith(Error, 'Some Copy File Error');
         });
     });
-    it('should propagate an error from a stats call', function () {
+    it('should propagate an error from a stats call', () => {
         const xfs = extend({}, mixedFs, {
             stat: (dir, cb) => {
                 cb(new Error('Some Stats Error'));
             }
         });
-        return fs.mkdirAsync(testFolder + '/one').then(function () {
+        return fs.mkdirAsync(testFolder + '/one').then(() => {
             return fs.writeFileAsync(testFolder + '/one/1.txt', 'In an infinite Universe anything can happen.');
-        }).then(function () {
+        }).then(() => {
             return expect(xfs.copyDir(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Some Stats Error');
         });
     });
-    it('should propagate an error from a mkdir call', function () {
+    it('should propagate an error from a mkdir call', () => {
         const xfs = extend({}, mixedFs, {
             mkdir: (dir, mode, cb) => {
                 cb(new Error('Some Mkdir Error'));
             }
         });
-        return fs.mkdirAsync(testFolder + '/one').then(function () {
+        return fs.mkdirAsync(testFolder + '/one').then(() => {
             return expect(xfs.copyDir(testFolder + '/one', testFolder + '/anotherOne')).to.eventually.be.rejectedWith(Error, 'Some Mkdir Error');
         });
     });

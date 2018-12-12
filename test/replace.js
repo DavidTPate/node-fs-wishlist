@@ -31,14 +31,14 @@ chai.use(chaiAsPromised);
 chai.use(dirtyChai);
 const expect = chai.expect;
 
-describe('#replace', function () {
-    afterEach(function () {
+describe('#replace', () => {
+    afterEach(() => {
         delete require.cache.fs;
     });
-    it('should replace fs with the mixed in fs', function () {
+    it('should replace fs with the mixed in fs', () => {
         expect(lib.replace()).to.equal(require('fs'));
     });
-    it('should replace fs with the mixed in fs with options', function () {
+    it('should replace fs with the mixed in fs with options', () => {
         expect(lib.replace({
             mixins: {
                 mkdirp: true,

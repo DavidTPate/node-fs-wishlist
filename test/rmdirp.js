@@ -38,35 +38,35 @@ const expect = chai.expect;
 const testFolder = 'test/mock';
 const mixedFs = lib.mixin(fs);
 
-describe('#rmdirp', function () {
-    beforeEach(function () {
+describe('#rmdirp', () => {
+    beforeEach(() => {
         return mixedFs.rmdirp(testFolder)
-            .then(function () {
+            .then(() => {
                 return mixedFs.mkdirp(testFolder);
             });
     });
-    it('should mixin rmdirp by default', function () {
+    it('should mixin rmdirp by default', () => {
         expect(lib.mixin(fs)).to.have.property('rmdirp');
     });
-    it('shouldn\'t mixin rmdirp when already implemented', function () {
-        const rmdirpFunc = function () {
+    it('shouldn\'t mixin rmdirp when already implemented', () => {
+        const rmdirpFunc = () => {
         };
         expect(lib.mixin(extend({}, fs, {rmdirp: rmdirpFunc})).rmdirp).to.equal(rmdirpFunc);
     });
-    it('should mixin rmdirp when included', function () {
+    it('should mixin rmdirp when included', () => {
         expect(lib.mixin(fs, {mixins: {rmdirp: true}})).to.have.property('rmdirp');
     });
-    it('shouldn\'t mixin rmdirp when excluded', function () {
+    it('shouldn\'t mixin rmdirp when excluded', () => {
         expect(lib.mixin(fs, {mixins: {rmdirp: false}})).to.not.have.property('rmdirp');
     });
-    it('should be able to recursively remove directories', function () {
+    it('should be able to recursively remove directories', () => {
         return helper.createDirectories(fs, [
             testFolder + '/one',
             testFolder + '/one/two',
             testFolder + '/one/two/three',
             testFolder + '/one/two/three/four',
             testFolder + '/one/two/three/four/five'
-        ]).then(function () {
+        ]).then(() => {
             return Promise.all([
                 fs.writeFileAsync(testFolder + '/1.txt', 'The impossible often has a kind of integrity to it which the merely improbable lacks.'),
                 fs.writeFileAsync(testFolder + '/one/2.txt', 'It can be very dangerous to see things from somebody else\'s point of view without the proper training.'),
@@ -75,9 +75,9 @@ describe('#rmdirp', function () {
                 fs.writeFileAsync(testFolder + '/one/two/three/four/5.txt', 'One is never alone with a rubber duck.'),
                 fs.writeFileAsync(testFolder + '/one/two/three/four/6.txt', 'Anything that thinks logically can be fooled by something else that thinks at least as logically as it does.')
             ]);
-        }).then(function () {
+        }).then(() => {
             return lib.mixin(fs).rmdirp(testFolder + '/one');
-        }).then(function () {
+        }).then(() => {
             return expect(helper.pathsExist(fs, [
                 testFolder + '/1.txt',
                 testFolder + '/one',
@@ -93,8 +93,8 @@ describe('#rmdirp', function () {
             ])).to.eventually.deep.equal([true, false, false, false, false, false, false, false, false, false, false]);
         });
     });
-    it('should be able to recursively remove directories with a callback', function () {
-        return fs.mkdirAsync(testFolder + '/one').then(function () {
+    it('should be able to recursively remove directories with a callback', () => {
+        return fs.mkdirAsync(testFolder + '/one').then(() => {
             return new Promise((resolve, reject) => {
                 lib.mixin(fs).rmdirp(testFolder + '/one', (err) => {
                     if (err) {
@@ -103,51 +103,51 @@ describe('#rmdirp', function () {
                     resolve();
                 });
             });
-        }).then(function () {
+        }).then(() => {
             return expect(helper.pathsExist(fs, [testFolder + '/one'])).to.eventually.deep.equal([false]);
         });
     });
-    it('shouldn\'t be able to remove a directory that already exists and isn\'t a directory', function () {
-        return fs.writeFileAsync(testFolder + '/one', 'The ships hung in the sky in much the same way bricks don\'t.').then(function () {
+    it('shouldn\'t be able to remove a directory that already exists and isn\'t a directory', () => {
+        return fs.writeFileAsync(testFolder + '/one', 'The ships hung in the sky in much the same way bricks don\'t.').then(() => {
             return expect(lib.mixin(fs).rmdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, /ENOTDIR/);
         });
     });
-    it('should be able to remove a directory that doesn\'t exist', function () {
+    it('should be able to remove a directory that doesn\'t exist', () => {
         return expect(lib.mixin(fs).rmdirp(testFolder + '/one')).to.eventually.be.fulfilled();
     });
-    it('should propagate an error from a stats call', function () {
+    it('should propagate an error from a stats call', () => {
         const xfs = extend({}, lib.mixin(fs), {
             stat: (dir, cb) => {
                 cb(new Error('Some Stats Error'));
             }
         });
         return fs.mkdirAsync(testFolder + '/one')
-            .then(function () {
+            .then(() => {
                 return fs.writeFileAsync(testFolder + '/one/1.txt', 'In an infinite Universe anything can happen.');
-            }).then(function () {
+            }).then(() => {
                 return expect(xfs.rmdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Some Stats Error');
             });
     });
-    it('should propagate an error from an unlink call', function () {
+    it('should propagate an error from an unlink call', () => {
         const xfs = extend({}, lib.mixin(fs), {
             unlink: (dir, cb) => {
                 cb(new Error('Some Unlink Error'));
             }
         });
         return fs.mkdirAsync(testFolder + '/one')
-            .then(function () {
+            .then(() => {
                 return fs.writeFileAsync(testFolder + '/one/1.txt', 'In an infinite Universe anything can happen.');
-            }).then(function () {
+            }).then(() => {
                 return expect(xfs.rmdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Some Unlink Error');
             });
     });
-    it('should propagate an error from a rmdir call', function () {
+    it('should propagate an error from a rmdir call', () => {
         const xfs = extend({}, lib.mixin(fs), {
             rmdir: (dir, cb) => {
                 cb(new Error('Some Rmdir Error'));
             }
         });
-        return fs.mkdirAsync(testFolder + '/one').then(function () {
+        return fs.mkdirAsync(testFolder + '/one').then(() => {
             return expect(xfs.rmdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Some Rmdir Error');
         });
     });

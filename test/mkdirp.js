@@ -38,29 +38,29 @@ const expect = chai.expect;
 const testFolder = 'test/mock';
 const mixedFs = lib.mixin(fs);
 
-describe('#mkdirp', function () {
-    beforeEach(function () {
+describe('#mkdirp', () => {
+    beforeEach(() => {
         return mixedFs.rmdirp(testFolder)
-            .then(function () {
+            .then(() => {
                 return mixedFs.mkdirp(testFolder);
             });
     });
-    it('should mixin mkdirp by default', function () {
+    it('should mixin mkdirp by default', () => {
         expect(lib.mixin(fs)).to.have.property('mkdirp');
     });
-    it('shouldn\'t mixin mkdirp when already implemented', function () {
-        const mkdirpFunc = function () {
+    it('shouldn\'t mixin mkdirp when already implemented', () => {
+        const mkdirpFunc = () => {
         };
         expect(lib.mixin(extend({}, fs, {mkdirp: mkdirpFunc})).mkdirp).to.equal(mkdirpFunc);
     });
-    it('should mixin mkdirp when included', function () {
+    it('should mixin mkdirp when included', () => {
         expect(lib.mixin(fs, {mixins: {mkdirp: true}})).to.have.property('mkdirp');
     });
-    it('shouldn\'t mixin mkdirp when excluded', function () {
+    it('shouldn\'t mixin mkdirp when excluded', () => {
         expect(lib.mixin(fs, {mixins: {mkdirp: false}})).to.not.have.property('mkdirp');
     });
-    it('should be able to recursively make directories', function () {
-        return lib.mixin(fs).mkdirp(testFolder + '/one/two/three/four').then(function () {
+    it('should be able to recursively make directories', () => {
+        return lib.mixin(fs).mkdirp(testFolder + '/one/two/three/four').then(() => {
             return expect(helper.pathsExist(fs, [
                 testFolder + '/one',
                 testFolder + '/one/two',
@@ -69,7 +69,7 @@ describe('#mkdirp', function () {
             ])).to.eventually.deep.equal([true, true, true, true]);
         });
     });
-    it('should be able to recursively make directories with a callback', function () {
+    it('should be able to recursively make directories with a callback', () => {
         return new Promise((resolve, reject) => {
             lib.mixin(fs).mkdirp(testFolder + '/one', (err) => {
                 if (err) {
@@ -79,9 +79,9 @@ describe('#mkdirp', function () {
             });
         });
     });
-    it('should be able to recursively make directories with a mode', function () {
+    it('should be able to recursively make directories with a mode', () => {
         const mode = parseInt('0776', 8);
-        return lib.mixin(fs).mkdirp(testFolder + '/one/two', mode).then(function () {
+        return lib.mixin(fs).mkdirp(testFolder + '/one/two', mode).then(() => {
             return helper.pathsExist(fs, [
                 testFolder + '/one',
                 testFolder + '/one/two'
@@ -106,7 +106,7 @@ describe('#mkdirp', function () {
             });
         });
     });
-    it('should be able to recursively make directories with a mode and callback', function () {
+    it('should be able to recursively make directories with a mode and callback', () => {
         const mode = parseInt('0776', 8);
         return new Promise((resolve, reject) => {
             lib.mixin(fs).mkdirp(testFolder + '/one', mode, (err) => {
@@ -123,23 +123,23 @@ describe('#mkdirp', function () {
             });
         });
     });
-    it('shouldn\'t be able to overwrite a directory that already exists and isn\'t a directory', function () {
-        return fs.writeFileAsync(testFolder + '/one', 'some data').then(function () {
+    it('shouldn\'t be able to overwrite a directory that already exists and isn\'t a directory', () => {
+        return fs.writeFileAsync(testFolder + '/one', 'some data').then(() => {
             return expect(lib.mixin(fs).mkdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Path test/mock/one already exists and is not a directory');
         });
     });
-    it('should be able to able to create a directory that already exists', function () {
-        return fs.mkdirAsync(testFolder + '/one').then(function () {
+    it('should be able to able to create a directory that already exists', () => {
+        return fs.mkdirAsync(testFolder + '/one').then(() => {
             return expect(lib.mixin(fs).mkdirp(testFolder + '/one')).to.eventually.be.fulfilled();
         });
     });
-    it('should propagate an error from a stats call', function () {
+    it('should propagate an error from a stats call', () => {
         const xfs = extend({}, lib.mixin(fs), {
             stat: (dir, cb) => {
                 cb(new Error('Some Stats Error'));
             }
         });
-        return fs.mkdirAsync(testFolder + '/one').then(function () {
+        return fs.mkdirAsync(testFolder + '/one').then(() => {
             return expect(xfs.mkdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Some Stats Error');
         });
     });

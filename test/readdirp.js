@@ -38,35 +38,35 @@ const expect = chai.expect;
 const testFolder = 'test/mock';
 const mixedFs = lib.mixin(fs);
 
-describe('#readdirp', function () {
-    beforeEach(function () {
+describe('#readdirp', () => {
+    beforeEach(() => {
         return mixedFs.rmdirp(testFolder)
             .then(() => {
                 return mixedFs.mkdirp(testFolder);
             });
     });
-    it('should mixin readdirp by default', function () {
+    it('should mixin readdirp by default', () => {
         expect(lib.mixin(fs)).to.have.property('readdirp');
     });
-    it('shouldn\'t mixin readdirp when already implemented', function () {
-        const readdirpFunc = function () {
+    it('shouldn\'t mixin readdirp when already implemented', () => {
+        const readdirpFunc = () => {
         };
         expect(lib.mixin(extend({}, fs, {readdirp: readdirpFunc})).readdirp).to.equal(readdirpFunc);
     });
-    it('should mixin readdirp when included', function () {
+    it('should mixin readdirp when included', () => {
         expect(lib.mixin(fs, {mixins: {readdirp: true}})).to.have.property('readdirp');
     });
-    it('shouldn\'t mixin readdirp when excluded', function () {
+    it('shouldn\'t mixin readdirp when excluded', () => {
         expect(lib.mixin(fs, {mixins: {readdirp: false}})).to.not.have.property('readdirp');
     });
-    it('should be able to recursively read directories', function () {
+    it('should be able to recursively read directories', () => {
         return helper.createDirectories(fs, [
             testFolder + '/one',
             testFolder + '/one/two',
             testFolder + '/one/two/three',
             testFolder + '/one/two/three/four',
             testFolder + '/one/two/three/four/five'
-        ]).then(function () {
+        ]).then(() => {
             return Promise.all([
                 fs.writeFileAsync(testFolder + '/1.txt', 'The impossible often has a kind of integrity to it which the merely improbable lacks.'),
                 fs.writeFileAsync(testFolder + '/one/2.txt', 'It can be very dangerous to see things from somebody else\'s point of view without the proper training.'),
@@ -75,7 +75,7 @@ describe('#readdirp', function () {
                 fs.writeFileAsync(testFolder + '/one/two/three/four/5.txt', 'One is never alone with a rubber duck.'),
                 fs.writeFileAsync(testFolder + '/one/two/three/four/6.txt', 'Anything that thinks logically can be fooled by something else that thinks at least as logically as it does.')
             ]);
-        }).then(function () {
+        }).then(() => {
             return expect(lib.mixin(fs).readdirp(testFolder + '/one')).to.eventually.deep.equal([
                 testFolder + '/one',
                 testFolder + '/one/2.txt',
@@ -90,8 +90,8 @@ describe('#readdirp', function () {
             ]);
         });
     });
-    it('should be able to recursively read directories with a callback', function () {
-        return fs.mkdirAsync(testFolder + '/one').then(function () {
+    it('should be able to recursively read directories with a callback', () => {
+        return fs.mkdirAsync(testFolder + '/one').then(() => {
             return new Promise((resolve, reject) => {
                 lib.mixin(fs).readdirp(testFolder + '/one', (err, files) => {
                     if (err) {
@@ -103,24 +103,24 @@ describe('#readdirp', function () {
             });
         });
     });
-    it('shouldn\'t be able to read a directory that already exists and isn\'t a directory', function () {
-        return fs.writeFileAsync(testFolder + '/one', 'The ships hung in the sky in much the same way bricks don\'t.').then(function () {
+    it('shouldn\'t be able to read a directory that already exists and isn\'t a directory', () => {
+        return fs.writeFileAsync(testFolder + '/one', 'The ships hung in the sky in much the same way bricks don\'t.').then(() => {
             return expect(lib.mixin(fs).readdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, /ENOTDIR/);
         });
     });
-    it('shouldn\'t be able to read a directory that doesn\'t exist', function () {
+    it('shouldn\'t be able to read a directory that doesn\'t exist', () => {
         return expect(lib.mixin(fs).readdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, /ENOENT/);
     });
-    it('should propagate an error from a stats call', function () {
+    it('should propagate an error from a stats call', () => {
         const xfs = extend({}, lib.mixin(fs), {
             stat: (dir, cb) => {
                 cb(new Error('Some Stats Error'));
             }
         });
         return fs.mkdirAsync(testFolder + '/one')
-            .then(function () {
+            .then(() => {
                 return fs.writeFileAsync(testFolder + '/one/1.txt', 'In an infinite Universe anything can happen.');
-            }).then(function () {
+            }).then(() => {
                 return expect(xfs.readdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Some Stats Error');
             });
     });
