@@ -112,12 +112,12 @@
                     cb(new Error('Some Stats Error'));
                 }
             });
-            return Promise.all([
-                fs.mkdirAsync(testFolder + '/one'),
-                fs.writeFileAsync(testFolder + '/one/1.txt', 'In an infinite Universe anything can happen.')
-            ]).then(function () {
-                return expect(xfs.readdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Some Stats Error');
-            });
+            return fs.mkdirAsync(testFolder + '/one')
+                .then(function () {
+                    return fs.writeFileAsync(testFolder + '/one/1.txt', 'In an infinite Universe anything can happen.');
+                }).then(function () {
+                    return expect(xfs.readdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Some Stats Error');
+                });
         });
     });
 }(require('chai'), require('chai-as-promised'), require('dirty-chai'), require('bluebird'), require('../index'), require('fs'), require('extend'), require('./helper')));

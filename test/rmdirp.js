@@ -116,12 +116,12 @@
                     cb(new Error('Some Stats Error'));
                 }
             });
-            return Promise.all([
-                fs.mkdirAsync(testFolder + '/one'),
-                fs.writeFileAsync(testFolder + '/one/1.txt', 'In an infinite Universe anything can happen.')
-            ]).then(function () {
-                return expect(xfs.rmdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Some Stats Error');
-            });
+            return fs.mkdirAsync(testFolder + '/one')
+                .then(function () {
+                    return fs.writeFileAsync(testFolder + '/one/1.txt', 'In an infinite Universe anything can happen.');
+                }).then(function () {
+                    return expect(xfs.rmdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Some Stats Error');
+                });
         });
         it('should propagate an error from an unlink call', function () {
             var xfs = extend({}, lib.mixin(fs), {
@@ -129,12 +129,12 @@
                     cb(new Error('Some Unlink Error'));
                 }
             });
-            return Promise.all([
-                fs.mkdirAsync(testFolder + '/one'),
-                fs.writeFileAsync(testFolder + '/one/1.txt', 'In an infinite Universe anything can happen.')
-            ]).then(function () {
-                return expect(xfs.rmdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Some Unlink Error');
-            });
+            return fs.mkdirAsync(testFolder + '/one')
+                .then(function () {
+                    return fs.writeFileAsync(testFolder + '/one/1.txt', 'In an infinite Universe anything can happen.');
+                }).then(function () {
+                    return expect(xfs.rmdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Some Unlink Error');
+                });
         });
         it('should propagate an error from a rmdir call', function () {
             var xfs = extend({}, lib.mixin(fs), {

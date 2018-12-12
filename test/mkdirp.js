@@ -119,7 +119,7 @@
             });
         });
         it('shouldn\'t be able to overwrite a directory that already exists and isn\'t a directory', function () {
-            return fs.writeFileAsync(testFolder + '/one').then(function () {
+            return fs.writeFileAsync(testFolder + '/one', 'some data').then(function () {
                 return expect(lib.mixin(fs).mkdirp(testFolder + '/one')).to.eventually.be.rejectedWith(Error, 'Path test/mock/one already exists and is not a directory');
             });
         });

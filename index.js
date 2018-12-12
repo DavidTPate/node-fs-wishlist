@@ -22,13 +22,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-(function (module, extend, mkdirp, rmdirp, readdirp, copyFile, copyDir) {
+(function (module, extend, mkdirp, rmdirp, readdirp, copyDir) {
 
     var availableMixins = {
         mkdirp: mkdirp,
         rmdirp: rmdirp,
         readdirp: readdirp,
-        copyFile: copyFile,
         copyDir: copyDir
     };
 
@@ -38,7 +37,6 @@
                 mkdirp: true,
                 rmdirp: true,
                 readdirp: true,
-                copyFile: true,
                 copyDir: true
             }
         }, options || {});
@@ -67,4 +65,4 @@
         mixin: mixin,
         replace: replace
     };
-}(module, require('extend'), require('./lib/mkdirp'), require('./lib/rmdirp'), require('./lib/readdirp'), require('./lib/copyFile'), require('./lib/copyDir')));
+}(module, require('extend'), require('./lib/mkdirp'), require('./lib/rmdirp'), require('./lib/readdirp'), require('./lib/copyDir')));

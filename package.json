@@ -26,24 +26,25 @@
   "license": "MIT",
   "main": "index.js",
   "dependencies": {
-    "bluebird": "^3.4.6",
+    "bluebird": "^3.5.3",
     "extend": "^3.x"
   },
   "devDependencies": {
     "buddy.js": "^0.x",
-    "chai": "^3.x",
-    "chai-as-promised": "^6.0.0",
-    "dirty-chai": "^1.2.2",
-    "eslint": "^3.7.1",
+    "chai": "^4.x",
+    "chai-as-promised": "^7.1.1",
+    "dirty-chai": "^2.0.1",
+    "eslint": "^5.10.0",
     "istanbul": "^0.4.5",
     "jscs": "^3.0.7",
     "jsinspect": "^0.x",
-    "mocha": "^3.1.2",
-    "nsp": "^2.6.2"
+    "lab": "^18.0.0",
+    "mocha": "^5.2.0",
+    "snyk": "^1.117.1"
   },
   "scripts": {
     "lint": "eslint . && jscs . && jsinspect . && buddy --detect-objects index.js ./lib",
-    "security": "nsp check",
+    "security": "snyk",
     "cover": "istanbul cover _mocha -- --check-leaks --recursive --timeout=25000 test && istanbul check-coverage --statements 100 --branches 100 --functions 100 --lines 100",
     "test": "mocha --check-leaks --recursive --timeout=25000 test",
     "test-ci": "npm run lint && npm run security && npm run cover"
