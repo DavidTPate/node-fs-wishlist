@@ -22,29 +22,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-(function (chai, chaiAsPromised, dirtyChai, Promise, lib) {
+const chai = require('chai');
+const chaiAsPromised = require('chai-as-promised');
+const dirtyChai = require('dirty-chai');
+const Promise = require('bluebird');
+const lib = require('../index');
 
-    chai.use(chaiAsPromised);
-    chai.use(dirtyChai);
-    var expect = chai.expect;
+chai.use(chaiAsPromised);
+chai.use(dirtyChai);
+const expect = chai.expect;
 
-    describe('#replace', function () {
-        afterEach(function () {
-            delete require.cache.fs;
-        });
-        it('should replace fs with the mixed in fs', function () {
-            expect(lib.replace()).to.equal(require('fs'));
-        });
-        it('should replace fs with the mixed in fs with options', function () {
-            expect(lib.replace({
-                mixins: {
-                    mkdirp: true,
-                    rmdirp: false
-                }
-            })).to.equal(require('fs'));
-
-            expect(require('fs').mkdirp).to.be.ok();
-            expect(require('fs').rmdirp).to.not.be.ok();
-        });
+describe('#replace', function () {
+    afterEach(function () {
+        delete require.cache.fs;
     });
-}(require('chai'), require('chai-as-promised'), require('dirty-chai'), require('bluebird'), require('../index')));
+    it('should replace fs with the mixed in fs', function () {
+        expect(lib.replace()).to.equal(require('fs'));
+    });
+    it('should replace fs with the mixed in fs with options', function () {
+        expect(lib.replace({
+            mixins: {
+                mkdirp: true,
+                rmdirp: false
+            }
+        })).to.equal(require('fs'));
+
+        expect(require('fs').mkdirp).to.be.ok();
+        expect(require('fs').rmdirp).to.not.be.ok();
+    });
+});
