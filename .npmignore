@@ -1,10 +1,7 @@
 coverage
 test
-.buddyrc
 .eslintignore
+.eslintrc
 .gitignore
-.jscsrc
-.jshintignore
-.jshintrc
-.jsinspectrc
 .travis.yml
+.idea
