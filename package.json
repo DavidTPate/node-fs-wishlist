@@ -1,6 +1,6 @@
 {
   "name": "fs-wishlist",
-  "version": "1.1.3",
+  "version": "2.0.0",
   "description": "Mixins for the Node.JS file system adding the functionality we wish it had.",
   "keywords": [
     "fs",
@@ -9,18 +9,21 @@
     "recursive",
     "mkdirp"
   ],
-  "homepage": "http://github.com/RiptideElements/node-fs-wishlist",
+  "homepage": "http://github.com/DavidTPate/node-fs-wishlist",
   "repository": {
     "type": "git",
-    "url": "git://github.com/RiptideElements/node-fs-wishlist.git"
+    "url": "git://github.com/DavidTPate/node-fs-wishlist.git"
   },
   "bugs": {
-    "url": "http://github.com/RiptideElements/node-fs-wishlist/issues"
+    "url": "http://github.com/DavidTPate/node-fs-wishlist/issues"
   },
   "author": {
     "name": "David Pate",
     "email": "davidtpate@gmail.com",
     "url": "https://github.com/DavidTPate"
+  },
+  "engines": {
+    "node": ">=8.5.0"
   },
   "contributors": [],
   "license": "MIT",
